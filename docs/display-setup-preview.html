@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Grogu Display Setup Preview</title>
+    <title>GroguOS Display Setup Preview</title>
     <style>
       :root{--leaf:#6f9a5d;--leaf-dark:#2f5734;--robe:#7a5f41;--sand:#f1e6d2;--panel:#fffdf7;--ink:#253026;--muted:#657160;--line:#d9ceb9}
       *{box-sizing:border-box}body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;margin:0;background:#efe6d5;color:var(--ink)}
@@ -18,7 +18,7 @@
   <body>
     <main>
       <header>
-        <h1>Grogu Display Setup</h1>
+        <h1>GroguOS Display Setup</h1>
         <p>Display WiFi, puppet connection, menu commands, and press timing. Setup address: 192.168.5.1.</p>
       </header>
       <nav class="tabs">
@@ -32,7 +32,7 @@
       <section class="panel" data-panel="connection">
         <form>
           <div class="grid">
-            <section class="card"><h2><span class="ch">Display</span>Setup AP</h2><div class="fields"><label class="span2">SSID<input value="Grogu Display"></label><label class="span2">Password<input value=""></label></div><p class="help">Leave password blank for an open setup network. Use 8 or more characters for a secured network.</p></section>
+            <section class="card"><h2><span class="ch">GroguOS</span>Display Setup AP</h2><div class="fields"><label class="span2">GroguOS Display SSID<input value="GroguOS Display"></label><label class="span2">Password<input value=""></label></div><p class="help">Leave password blank for an open setup network. Use 8 or more characters for a secured network.</p></section>
             <section class="card"><h2><span class="ch">Puppet</span>Connection</h2><div class="fields"><label class="span2">Puppet AP SSID<input value="Grogu Setup"></label><label>Puppet IP<input value="192.168.4.1"></label><label>Press to Send ms<input type="number" min="0" max="3000" value="350"></label><label>Sleep After<select><option>30 Seconds</option><option selected>1 Minute</option><option>2 Minutes</option><option>5 Minutes</option></select></label></div><p class="help">ESP-NOW uses the shared Grogu channel. The IP is used for HTTP fallback. Tap the display to wake it after sleep.</p></section>
           </div>
           <div class="actions"><button type="button">Save Connection Settings</button></div>
@@ -56,8 +56,10 @@
 
       <section class="panel" data-panel="sound" hidden>
         <form><div class="grid">
-          <section class="card"><h2><span class="ch">1</span>Play Track 1</h2><div class="fields"><label class="span2">Show on display<select><option selected>Yes</option><option>No</option></select></label><label class="span2">Label<input value="Play Track 1"></label><label>Sound Action<select><option selected>Play track</option><option>Stop</option><option>Set volume</option></select></label><label>Track / Value<input type="number" value="1"></label><label>Volume / Preset<input type="number" min="0" max="30" value="22"></label><label>Order<input type="number" value="1"></label></div></section>
-          <section class="card"><h2><span class="ch">2</span>Stop Sound</h2><div class="fields"><label class="span2">Show on display<select><option selected>Yes</option><option>No</option></select></label><label class="span2">Label<input value="Stop Sound"></label><label>Sound Action<select><option>Play track</option><option selected>Stop</option><option>Set volume</option></select></label><label>Track / Value<input type="number" value="0"></label><label>Volume / Preset<input type="number" min="0" max="30" value="0"></label><label>Order<input type="number" value="2"></label></div></section>
+          <section class="card"><h2><span class="ch">1</span>Cute</h2><div class="fields"><label class="span2">Show on display<select><option selected>Yes</option><option>No</option></select></label><label class="span2">Label<input value="Cute"></label><label>Sound Action<select data-sound-command="1"><option value="3">Play Track</option><option value="7" selected>Random Category</option><option value="4">Stop Sound</option><option value="5">Set Volume</option></select></label><label data-sound-track-label="1">Track<input data-sound-value-input="1" type="number" value="1"></label><label data-sound-category-label="1">Category<select data-sound-category-select="1"><option selected>Cute (1-25)</option><option>Phrases (26-50)</option><option>Sentences (51-75)</option><option>Burps and Slurps (76-100)</option><option>Sound Combos (101-125)</option></select></label><label>Volume / Preset<input type="number" min="0" max="30" value="30"></label><label>Order<input type="number" value="1"></label></div></section>
+          <section class="card"><h2><span class="ch">2</span>Phrases</h2><div class="fields"><label class="span2">Show on display<select><option selected>Yes</option><option>No</option></select></label><label class="span2">Label<input value="Phrases"></label><label>Sound Action<select data-sound-command="2"><option value="3">Play Track</option><option value="7" selected>Random Category</option><option value="4">Stop Sound</option><option value="5">Set Volume</option></select></label><label data-sound-track-label="2">Track<input data-sound-value-input="2" type="number" value="26"></label><label data-sound-category-label="2">Category<select data-sound-category-select="2"><option>Cute (1-25)</option><option selected>Phrases (26-50)</option><option>Sentences (51-75)</option><option>Burps and Slurps (76-100)</option><option>Sound Combos (101-125)</option></select></label><label>Volume / Preset<input type="number" min="0" max="30" value="30"></label><label>Order<input type="number" value="2"></label></div></section>
+          <section class="card"><h2><span class="ch">3</span>Specific Track</h2><div class="fields"><label class="span2">Show on display<select><option selected>Yes</option><option>No</option></select></label><label class="span2">Label<input value="Track 0001"></label><label>Sound Action<select data-sound-command="3"><option value="3" selected>Play Track</option><option value="7">Random Category</option><option value="4">Stop Sound</option><option value="5">Set Volume</option></select></label><label data-sound-track-label="3">Track<input data-sound-value-input="3" type="number" value="1"></label><label data-sound-category-label="3">Category<select data-sound-category-select="3"><option selected>Cute (1-25)</option><option>Phrases (26-50)</option><option>Sentences (51-75)</option><option>Burps and Slurps (76-100)</option><option>Sound Combos (101-125)</option></select></label><label>Volume / Preset<input type="number" min="0" max="30" value="22"></label><label>Order<input type="number" value="3"></label></div></section>
+          <section class="card"><h2><span class="ch">4</span>Stop Sound</h2><div class="fields"><label class="span2">Show on display<select><option selected>Yes</option><option>No</option></select></label><label class="span2">Label<input value="Stop Sound"></label><label>Sound Action<select data-sound-command="4"><option value="3">Play Track</option><option value="7">Random Category</option><option value="4" selected>Stop Sound</option><option value="5">Set Volume</option></select></label><label data-sound-track-label="4">Track<input data-sound-value-input="4" type="number" value="0"></label><label data-sound-category-label="4">Category<select data-sound-category-select="4"><option selected>Cute (1-25)</option><option>Phrases (26-50)</option><option>Sentences (51-75)</option><option>Burps and Slurps (76-100)</option><option>Sound Combos (101-125)</option></select></label><label>Volume / Preset<input type="number" min="0" max="30" value="0"></label><label>Order<input type="number" value="4"></label></div></section>
         </div><button class="secondary" type="button">Add New Command</button><div class="actions"><button type="button">Save Sounds</button></div></form>
       </section>
 
@@ -82,6 +84,37 @@
       }));
       const initialTab = location.hash.replace("#", "");
       if (initialTab && document.querySelector('[data-tab="' + initialTab + '"]')) activate(initialTab);
+      document.querySelectorAll('[data-panel]:not([data-panel="connection"]) .card').forEach((card) => {
+        const button = document.createElement("button");
+        button.className = "secondary";
+        button.type = "button";
+        button.textContent = "Remove Command";
+        button.addEventListener("click", () => {
+          const panel = card.closest("[data-panel]");
+          const visibleCards = [...panel.querySelectorAll(".card")].filter((item) => !item.hidden);
+          if (visibleCards.length <= 1) return;
+          card.hidden = true;
+        });
+        card.appendChild(button);
+      });
+      function syncSoundEditor(i) {
+        const cmd = document.querySelector('[data-sound-command="' + i + '"]');
+        const input = document.querySelector('[data-sound-value-input="' + i + '"]');
+        const cat = document.querySelector('[data-sound-category-select="' + i + '"]');
+        const trackLabel = document.querySelector('[data-sound-track-label="' + i + '"]');
+        const catLabel = document.querySelector('[data-sound-category-label="' + i + '"]');
+        if (!cmd || !input || !cat) return;
+        const random = cmd.value === "7";
+        const track = cmd.value === "3";
+        input.disabled = !track;
+        cat.disabled = !random;
+        if (trackLabel) trackLabel.hidden = !track;
+        if (catLabel) catLabel.hidden = !random;
+      }
+      document.querySelectorAll("[data-sound-command]").forEach((select) => {
+        select.addEventListener("change", () => syncSoundEditor(select.dataset.soundCommand));
+        syncSoundEditor(select.dataset.soundCommand);
+      });
     </script>
   </body>
 </html>

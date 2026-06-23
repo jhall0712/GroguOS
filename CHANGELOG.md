@@ -1,5 +1,17 @@
 # Changelog
 
+## Display 0.2.9
+
+- Added random sound category buttons for `Cute`, `Phrases`, `Sentences`,
+  `Burps and Slurps`, and `Sound Combos`.
+- Added setup-page support for choosing either a specific sound track or a
+  random sound category.
+- Hid category fields when `Play Track` is selected, and hid track fields when
+  `Random Category` is selected.
+- Added remove buttons for display menu commands across Built-Ins, Maestro,
+  Sounds, and Combos.
+- Rebranded the display setup page and default display setup AP to `GroguOS`.
+
 ## 0.3.1
 
 - Added fixed random sound categories for `Cute`, `Phrases`, `Sentences`,

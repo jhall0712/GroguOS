@@ -5,7 +5,7 @@ first tests for the XIAO ESP32-S3 puppet controller.
 
 Current master firmware version: `0.3.1`
 
-Current display firmware version: `Display 0.2.8`
+Current display firmware version: `Display 0.2.9`
 
 Current stable rollback version: `0.3.0`
 
@@ -34,7 +34,7 @@ Current stable rollback version: `0.3.0`
 - Master setup AP: `Grogu Setup`
 - Master setup AP password: optional
 - Master setup page: `http://192.168.4.1`
-- Display setup AP: `Grogu Display`
+- Display setup AP: `GroguOS Display`
 - Display setup page: `http://192.168.5.1`
 
 ## Current GroguOS Features

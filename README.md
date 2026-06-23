@@ -7,7 +7,7 @@ control interface from the ESP32 setup access point.
 
 Current master firmware version: `0.3.1`
 
-Current display firmware version: `Display 0.2.8`
+Current display firmware version: `Display 0.2.9`
 
 Current stable rollback version: `0.3.0`
 
