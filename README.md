@@ -14,6 +14,8 @@ Current stable rollback version: `0.3.0`
 Flash the latest firmware via web browser here:
 [Web Flash Tool](https://animated-grogu.pages.dev/)
 
+[Parts List Here](https://linktr.ee/GroguOS)
+
 ## Documentation
 
 - [Docs index](docs/README.md)
