@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>GroguOS Access Preview</title>
+    <style>
+      :root{--leaf:#6f9a5b;--deep:#263025;--robe:#8a6a45;--paper:#fffdf7;--mist:#e7efd9;--line:#d8cdb9}
+      *{box-sizing:border-box}
+      body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:linear-gradient(180deg,#dfead2 0,#f5eedf 55%,#e9d8bd 100%);color:var(--deep)}
+      main{min-height:100vh;display:grid;grid-template-rows:1fr auto;padding:24px 16px}
+      .brand{display:grid;place-items:start center;text-align:center;padding-top:clamp(8px,6vh,42px)}
+      .logo{display:block;width:min(78vw,420px);height:auto;filter:drop-shadow(0 14px 24px rgba(64,48,29,.2))}
+      h1{margin:18px 0 6px;font-size:2.6rem;line-height:1;color:#355c3a;letter-spacing:0}
+      p{margin:0;color:#64715f}
+      .actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:min(620px,100%);margin:0 auto}
+      .button{min-height:58px;display:grid;place-items:center;border-radius:8px;border:1px solid var(--line);text-decoration:none;font-weight:900;color:white;background:#355c3a;box-shadow:0 10px 22px rgba(53,92,58,.22)}
+      .button.secondary{background:var(--robe)}
+      .meta{margin:14px auto 0;text-align:center;font-size:.86rem;color:#64715f}
+      @media(max-width:560px){main{padding:18px 14px}.actions{grid-template-columns:1fr}.button{min-height:54px}h1{font-size:2.2rem}}
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="brand">
+        <div>
+          <img class="logo" src="/logo.png" alt="GroguOS">
+          <h1>GroguOS</h1>
+          <p>Connected to Grogu Setup</p>
+        </div>
+      </section>
+      <section>
+        <div class="actions">
+          <a class="button" href="/control">Control</a>
+          <a class="button secondary" href="/settings">Settings</a>
+        </div>
+        <p class="meta">Firmware v0.3.1</p>
+      </section>
+    </main>
+  </body>
+</html>

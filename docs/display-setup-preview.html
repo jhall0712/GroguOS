@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Grogu Display Setup Preview</title>
+    <style>
+      :root{--leaf:#6f9a5d;--leaf-dark:#2f5734;--robe:#7a5f41;--sand:#f1e6d2;--panel:#fffdf7;--ink:#253026;--muted:#657160;--line:#d9ceb9}
+      *{box-sizing:border-box}body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;margin:0;background:#efe6d5;color:var(--ink)}
+      main{max-width:1100px;margin:auto;padding:18px 14px 34px}header{padding:8px 0 16px;border-bottom:1px solid rgba(47,87,52,.24);margin-bottom:16px}
+      h1{font-size:clamp(1.7rem,6vw,2.7rem);line-height:1;margin:0;color:var(--leaf-dark);letter-spacing:0}header p{margin:.45rem 0 0;color:var(--muted)}
+      .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}.tab{display:block;padding:10px 13px;border:1px solid var(--line);border-radius:8px;background:#f8f1e5;color:var(--leaf-dark);font-weight:800;text-decoration:none}.tab.active{background:var(--leaf-dark);color:white;border-color:var(--leaf-dark)}
+      .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}.card{background:var(--panel);border:1px solid var(--line);border-top:6px solid var(--leaf);border-radius:8px;padding:14px;box-shadow:0 8px 22px rgba(64,48,29,.08)}
+      .card h2{display:flex;align-items:baseline;gap:9px;margin:0 0 12px;font-size:1.02rem}.ch{color:var(--robe);font-size:.8rem;font-weight:800;text-transform:uppercase}.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+      label{display:block;font-size:.76rem;font-weight:800;color:var(--leaf-dark);text-transform:uppercase}input,select{width:100%;min-height:40px;margin-top:4px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink);font:inherit;padding:8px}.span2{grid-column:1/-1}
+      .actions{position:sticky;bottom:0;margin-top:18px;padding:12px 0;background:linear-gradient(180deg,rgba(239,230,213,0),#efe6d5 35%)}button{width:100%;min-height:48px;border:0;border-radius:8px;background:var(--leaf-dark);color:white;font:800 1rem system-ui;box-shadow:0 8px 18px rgba(47,87,52,.22)}.secondary{background:var(--robe);margin-top:14px}.help{font-size:.86rem;line-height:1.45;color:var(--muted);margin:.75rem 0 0}.status{min-height:1.2em;color:var(--muted);font-size:.9rem;margin:.75rem 0 0}@media(max-width:560px){.fields{grid-template-columns:1fr}.span2{grid-column:auto}.tabs{position:sticky;top:0;z-index:2;background:#efe6d5;padding:8px 0}}
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Grogu Display Setup</h1>
+        <p>Display WiFi, puppet connection, menu commands, and press timing. Setup address: 192.168.5.1.</p>
+      </header>
+      <nav class="tabs">
+        <a class="tab active" href="#connection" data-tab="connection">Connection</a>
+        <a class="tab" href="#built" data-tab="built">Built-Ins</a>
+        <a class="tab" href="#maestro" data-tab="maestro">Maestro</a>
+        <a class="tab" href="#sound" data-tab="sound">Sounds</a>
+        <a class="tab" href="#combo" data-tab="combo">Combos</a>
+      </nav>
+
+      <section class="panel" data-panel="connection">
+        <form>
+          <div class="grid">
+            <section class="card"><h2><span class="ch">Display</span>Setup AP</h2><div class="fields"><label class="span2">SSID<input value="Grogu Display"></label><label class="span2">Password<input value=""></label></div><p class="help">Leave password blank for an open setup network. Use 8 or more characters for a secured network.</p></section>
+            <section class="card"><h2><span class="ch">Puppet</span>Connection</h2><div class="fields"><label class="span2">Puppet AP SSID<input value="Grogu Setup"></label><label>Puppet IP<input value="192.168.4.1"></label><label>Press to Send ms<input type="number" min="0" max="3000" value="350"></label><label>Sleep After<select><option>30 Seconds</option><option selected>1 Minute</option><option>2 Minutes</option><option>5 Minutes</option></select></label></div><p class="help">ESP-NOW uses the shared Grogu channel. The IP is used for HTTP fallback. Tap the display to wake it after sleep.</p></section>
+          </div>
+          <div class="actions"><button type="button">Save Connection Settings</button></div>
+        </form>
+      </section>
+
+      <section class="panel" data-panel="built" hidden>
+        <form><div class="grid">
+          <section class="card"><h2><span class="ch">1</span>Auto Mode</h2><div class="fields"><label class="span2">Show On Display<select><option selected>Yes</option><option>No</option></select></label><label class="span2">Label<input value="Auto Mode"></label><label>Built-In Command<select><option selected>Auto Mode Toggle</option><option>Arm Mode Toggle</option><option>Right Arm Wave</option><option>Surprise No</option></select></label><label>Order<input type="number" value="1"></label></div></section>
+          <section class="card"><h2><span class="ch">2</span>Arm Mode</h2><div class="fields"><label class="span2">Show On Display<select><option selected>Yes</option><option>No</option></select></label><label class="span2">Label<input value="Arm Mode"></label><label>Built-In Command<select><option>Auto Mode Toggle</option><option selected>Arm Mode Toggle</option><option>Right Arm Wave</option><option>Surprise No</option></select></label><label>Order<input type="number" value="2"></label></div></section>
+          <section class="card"><h2><span class="ch">3</span>Surprise No</h2><div class="fields"><label class="span2">Show On Display<select><option selected>Yes</option><option>No</option></select></label><label class="span2">Label<input value="Surprise No"></label><label>Built-In Command<select><option>Auto Mode Toggle</option><option>Arm Mode Toggle</option><option>Right Arm Wave</option><option selected>Surprise No</option></select></label><label>Order<input type="number" value="3"></label></div></section>
+        </div><button class="secondary" type="button">Add New Command</button><div class="actions"><button type="button">Save Built Ins</button></div></form>
+      </section>
+
+      <section class="panel" data-panel="maestro" hidden>
+        <form><div class="grid">
+          <section class="card"><h2><span class="ch">1</span>Subroutine 00</h2><div class="fields"><label class="span2">Show on display<select><option selected>Yes</option><option>No</option></select></label><label class="span2">Label<input value="Subroutine 00"></label><label>Sequence<input type="number" min="0" max="127" value="0"></label><label>Command Holdoff ms<input type="number" value="2500"></label><label>Order<input type="number" value="1"></label></div></section>
+          <section class="card"><h2><span class="ch">2</span>Subroutine 01</h2><div class="fields"><label class="span2">Show on display<select><option selected>Yes</option><option>No</option></select></label><label class="span2">Label<input value="Subroutine 01"></label><label>Sequence<input type="number" min="0" max="127" value="1"></label><label>Command Holdoff ms<input type="number" value="2500"></label><label>Order<input type="number" value="2"></label></div></section>
+        </div><button class="secondary" type="button">Add New Command</button><div class="actions"><button type="button">Save Maestro</button></div></form>
+      </section>
+
+      <section class="panel" data-panel="sound" hidden>
+        <form><div class="grid">
+          <section class="card"><h2><span class="ch">1</span>Play Track 1</h2><div class="fields"><label class="span2">Show on display<select><option selected>Yes</option><option>No</option></select></label><label class="span2">Label<input value="Play Track 1"></label><label>Sound Action<select><option selected>Play track</option><option>Stop</option><option>Set volume</option></select></label><label>Track / Value<input type="number" value="1"></label><label>Volume / Preset<input type="number" min="0" max="30" value="22"></label><label>Order<input type="number" value="1"></label></div></section>
+          <section class="card"><h2><span class="ch">2</span>Stop Sound</h2><div class="fields"><label class="span2">Show on display<select><option selected>Yes</option><option>No</option></select></label><label class="span2">Label<input value="Stop Sound"></label><label>Sound Action<select><option>Play track</option><option selected>Stop</option><option>Set volume</option></select></label><label>Track / Value<input type="number" value="0"></label><label>Volume / Preset<input type="number" min="0" max="30" value="0"></label><label>Order<input type="number" value="2"></label></div></section>
+        </div><button class="secondary" type="button">Add New Command</button><div class="actions"><button type="button">Save Sounds</button></div></form>
+      </section>
+
+      <section class="panel" data-panel="combo" hidden>
+        <form><div class="grid">
+          <section class="card"><h2><span class="ch">1</span>Combo 1</h2><div class="fields"><label class="span2">Show on display<select><option selected>Yes</option><option>No</option></select></label><label class="span2">Label<input value="Combo 1"></label><label>Combo Slot<select><option selected>Combo 1</option><option>Combo 2</option><option>Combo 3</option><option>Combo 4</option></select></label><label>Order<input type="number" value="1"></label></div><p class="help">Display menu item that sends a saved combo sequence from the Master.</p></section>
+          <section class="card"><h2><span class="ch">2</span>Combo 2</h2><div class="fields"><label class="span2">Show on display<select><option selected>Yes</option><option>No</option></select></label><label class="span2">Label<input value="Combo 2"></label><label>Combo Slot<select><option>Combo 1</option><option selected>Combo 2</option><option>Combo 3</option><option>Combo 4</option></select></label><label>Order<input type="number" value="2"></label></div><p class="help">Create and edit combo steps from the Master setup page.</p></section>
+        </div><button class="secondary" type="button">Add New Command</button><div class="actions"><button type="button">Save Combos</button></div></form>
+      </section>
+    </main>
+    <script>
+      const tabs = document.querySelectorAll("[data-tab]");
+      const panels = document.querySelectorAll("[data-panel]");
+      function activate(tab) {
+        tabs.forEach((link) => link.classList.toggle("active", link.dataset.tab === tab));
+        panels.forEach((panel) => panel.hidden = panel.dataset.panel !== tab);
+      }
+      tabs.forEach((link) => link.addEventListener("click", (event) => {
+        event.preventDefault();
+        activate(link.dataset.tab);
+        history.replaceState(null, "", "#" + link.dataset.tab);
+      }));
+      const initialTab = location.hash.replace("#", "");
+      if (initialTab && document.querySelector('[data-tab="' + initialTab + '"]')) activate(initialTab);
+    </script>
+  </body>
+</html>

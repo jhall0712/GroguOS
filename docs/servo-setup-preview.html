@@ -1,0 +1,637 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>GroguOS Settings Preview</title>
+    <style>
+      :root{--leaf:#7fa36b;--leaf-dark:#355c3a;--ear:#b9d29a;--robe:#8a6a45;--sand:#f2eadc;--panel:#fffdf7;--ink:#263025;--muted:#64715f;--line:#d8cdb9}
+      *{box-sizing:border-box}body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;margin:0;background:linear-gradient(180deg,#dfead2 0,#f4eddf 38%,#efe2cc 100%);color:var(--ink)}
+      main{max-width:1120px;margin:auto;padding:20px 14px 34px}header{padding:8px 0 18px;border-bottom:1px solid rgba(53,92,58,.24);margin-bottom:18px}.setup-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.home-btn{display:inline-grid;place-items:center;min-height:42px;padding:0 14px;border-radius:8px;background:var(--robe);color:white;font-weight:900;text-decoration:none;white-space:nowrap}
+      h1{font-size:clamp(1.8rem,7vw,3rem);line-height:1;margin:0;color:var(--leaf-dark);letter-spacing:0}header p{margin:.5rem 0 0;color:var(--muted)}
+      .tabs{display:flex;gap:8px;margin:0 0 18px;flex-wrap:wrap}.tab{display:block;padding:10px 14px;border:1px solid var(--line);border-radius:8px;background:#f8f3e8;color:var(--leaf-dark);font-weight:800;text-decoration:none}.tab.active{background:var(--leaf-dark);color:white;border-color:var(--leaf-dark)}
+      .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}.card{background:var(--panel);border:1px solid var(--line);border-top:6px solid var(--leaf);border-radius:8px;padding:15px;box-shadow:0 8px 22px rgba(64,48,29,.08)}
+      .card h2{display:flex;align-items:baseline;gap:9px;margin:0 0 12px;font-size:1.05rem}.ch{color:var(--robe);font-size:.85rem;font-weight:800;text-transform:uppercase}.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+      label{display:block;font-size:.76rem;font-weight:800;color:var(--leaf-dark);text-transform:uppercase}input,select{width:100%;min-height:40px;margin-top:4px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink);font:inherit;padding:8px}input:disabled,select:disabled{background:#eee8dc;color:#928879;cursor:not-allowed}label.disabled{color:#928879}
+      .span2{grid-column:1/-1}.toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);border-radius:6px;background:#f8f3e8;padding:9px 10px}.toggle label{margin:0}.toggle input{width:22px;min-height:22px;margin:0;accent-color:var(--leaf-dark)}
+      .mini-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.mini-actions button,.capture button{min-height:38px;font-size:.82rem;box-shadow:none}.capture{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.range-row{display:grid;grid-template-columns:1fr 96px;gap:10px;align-items:end}.range-row input[type=range]{padding:0}.cal-status{min-height:1.2em;color:var(--muted);font-size:.82rem;margin:.65rem 0 0}
+      .command-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}.status{min-height:1.2em;color:var(--muted);font-size:.9rem;margin:.75rem 0 0}.secondary{background:var(--robe)}.combo-step{margin-top:10px;border-top:1px solid var(--line);padding-top:10px}.combo-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}.combo-actions button{min-height:30px;font-size:.76rem;border-radius:6px;box-shadow:none}.combo-actions button:disabled,.combo-add-wide:disabled{opacity:.45;cursor:not-allowed}.combo-add,.combo-add-wide{background:var(--leaf-dark)}.combo-add-wide{margin-top:14px}.combo-remove{background:#9f4c42}.combo-test{background:var(--robe)}.hidden{display:none!important}textarea{width:100%;min-height:260px;margin-top:8px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink);font:13px ui-monospace,SFMono-Regular,Consolas,monospace;padding:10px}
+      .actions{position:sticky;bottom:0;margin-top:18px;padding:12px 0;background:linear-gradient(180deg,rgba(242,234,220,0),#efe2cc 35%)}button{width:100%;min-height:48px;border:0;border-radius:8px;background:var(--leaf-dark);color:white;font:800 1rem system-ui;box-shadow:0 8px 18px rgba(53,92,58,.22)}
+      .note{color:var(--muted);font-size:.9rem;margin:14px 0 0}.note strong{color:var(--leaf-dark)}
+      .help{font-size:.86rem;line-height:1.45;color:var(--muted);margin:.75rem 0 0}.help code{background:#ede5d7;border-radius:4px;padding:1px 4px}
+      .panel[hidden]{display:none}@media(max-width:560px){.fields{grid-template-columns:1fr}.span2{grid-column:auto}.tabs{position:sticky;top:0;z-index:2;background:#dfead2;padding:8px 0}}
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="setup-head">
+          <div>
+            <h1>GroguOS Settings</h1>
+            <p>Servo limits, RC button assignments, and motion tuning. Firmware v0.3.1.</p>
+          </div>
+          <a class="home-btn" href="/">Home</a>
+        </div>
+      </header>
+
+      <nav class="tabs">
+        <a class="tab active" href="#settings" data-tab="settings">System</a>
+        <a class="tab" href="#servos" data-tab="servos">Servos</a>
+        <a class="tab" href="#calibrate" data-tab="calibrate">Calibrate</a>
+        <a class="tab" href="#rc" data-tab="rc">RC Input</a>
+        <a class="tab" href="#buttons" data-tab="buttons">Button Assignments</a>
+        <a class="tab" href="#combo" data-tab="combo">Combo Sequences</a>
+        <a class="tab" href="#control" data-tab="control">Control Setup</a>
+        <a class="tab" href="/control">Control Preview</a>
+      </nav>
+
+      <section class="panel" data-panel="servos" hidden>
+        <form>
+          <div class="grid">
+            <section class="card"><h2><span class="ch">CH0</span>Head Tilt Axis 1</h2><div class="fields"><label>Min<input value="3000"></label><label>Center<input value="6000"></label><label>Max<input value="8800"></label><label>Speed<input value="25"></label><label>Acceleration<input value="8"></label><label>Smoothing<input value="0.18"></label><div class="toggle span2"><label for="rev0">Reversed</label><input id="rev0" type="checkbox"></div></div></section>
+            <section class="card"><h2><span class="ch">CH1</span>Head Tilt Axis 2</h2><div class="fields"><label>Min<input value="3000"></label><label>Center<input value="6000"></label><label>Max<input value="8800"></label><label>Speed<input value="25"></label><label>Acceleration<input value="8"></label><label>Smoothing<input value="0.18"></label><div class="toggle span2"><label for="rev1">Reversed</label><input id="rev1" type="checkbox"></div></div></section>
+            <section class="card"><h2><span class="ch">CH2</span>Neck Rotate</h2><div class="fields"><label>Min<input value="3200"></label><label>Center<input value="6000"></label><label>Max<input value="8800"></label><label>Speed<input value="20"></label><label>Acceleration<input value="6"></label><label>Smoothing<input value="0.14"></label><div class="toggle span2"><label for="rev2">Reversed</label><input id="rev2" type="checkbox"></div></div></section>
+            <section class="card"><h2><span class="ch">CH3</span>Left Arm</h2><div class="fields"><label>Min<input value="3200"></label><label>Center<input value="6000"></label><label>Max<input value="12000"></label><label>Speed<input value="30"></label><label>Acceleration<input value="10"></label><label>Smoothing<input value="0.16"></label><div class="toggle span2"><label for="rev3">Reversed</label><input id="rev3" type="checkbox"></div></div></section>
+            <section class="card"><h2><span class="ch">CH4</span>Right Arm</h2><div class="fields"><label>Min<input value="3200"></label><label>Center<input value="6000"></label><label>Max<input value="12000"></label><label>Speed<input value="30"></label><label>Acceleration<input value="10"></label><label>Smoothing<input value="0.16"></label><div class="toggle span2"><label for="rev4">Reversed</label><input id="rev4" type="checkbox" checked></div></div></section>
+            <section class="card"><h2><span class="ch">CH5</span>Left Elbow</h2><div class="fields"><label>Min<input value="3200"></label><label>Center<input value="6000"></label><label>Max<input value="12000"></label><label>Speed<input value="30"></label><label>Acceleration<input value="10"></label><label>Smoothing<input value="0.16"></label><div class="toggle span2"><label for="rev5">Reversed</label><input id="rev5" type="checkbox"></div></div></section>
+            <section class="card"><h2><span class="ch">CH6</span>Right Elbow</h2><div class="fields"><label>Min<input value="3200"></label><label>Center<input value="6000"></label><label>Max<input value="12000"></label><label>Speed<input value="30"></label><label>Acceleration<input value="10"></label><label>Smoothing<input value="0.16"></label><div class="toggle span2"><label for="rev6">Reversed</label><input id="rev6" type="checkbox" checked></div></div></section>
+          </div>
+          <div class="actions"><button type="button">Save Servo Settings</button></div>
+        </form>
+      </section>
+
+      <section class="panel" data-panel="calibrate" hidden>
+        <form>
+          <div class="grid">
+            <section class="card" data-reversed="0"><h2><span class="ch">CH0</span>Head Tilt Axis 1</h2><div class="fields"><label>Saved Min<input data-min="0" value="3000"></label><label>Saved Center<input data-center="0" value="6000"></label><label>Saved Max<input data-max="0" value="8800"></label><label>Test Target<input data-test-number="0" value="6000"></label><div class="span2 range-row"><label>Live Test<input data-test-range="0" type="range" min="992" max="8800" value="6000"></label><button type="button" data-move="0">Move</button></div><div class="span2 mini-actions"><button type="button" data-goto="min" data-channel="0">Go Min</button><button type="button" data-goto="center" data-channel="0">Go Center</button><button type="button" data-goto="max" data-channel="0">Go Max</button></div><div class="span2 capture"><button type="button" data-copy="min" data-channel="0">Use Current as Min</button><button type="button" data-copy="center" data-channel="0">Use Current as Center</button><button type="button" data-copy="max" data-channel="0">Use Current as Max</button></div></div><p class="help">Move slowly. Save to keep copied values.</p><p class="cal-status" data-status="0"></p></section>
+            <section class="card" data-reversed="0"><h2><span class="ch">CH1</span>Head Tilt Axis 2</h2><div class="fields"><label>Saved Min<input data-min="1" value="3000"></label><label>Saved Center<input data-center="1" value="6000"></label><label>Saved Max<input data-max="1" value="8800"></label><label>Test Target<input data-test-number="1" value="6000"></label><div class="span2 range-row"><label>Live Test<input data-test-range="1" type="range" min="992" max="8800" value="6000"></label><button type="button" data-move="1">Move</button></div><div class="span2 mini-actions"><button type="button" data-goto="min" data-channel="1">Go Min</button><button type="button" data-goto="center" data-channel="1">Go Center</button><button type="button" data-goto="max" data-channel="1">Go Max</button></div><div class="span2 capture"><button type="button" data-copy="min" data-channel="1">Use Current as Min</button><button type="button" data-copy="center" data-channel="1">Use Current as Center</button><button type="button" data-copy="max" data-channel="1">Use Current as Max</button></div></div><p class="help">This channel moves with CH0 from stick up/down in normal head mode. Reverse this servo if the paired tilt direction is wrong.</p><p class="cal-status" data-status="1"></p></section>
+            <section class="card" data-reversed="0"><h2><span class="ch">CH2</span>Neck Rotate</h2><div class="fields"><label>Saved Min<input data-min="2" value="3200"></label><label>Saved Center<input data-center="2" value="6000"></label><label>Saved Max<input data-max="2" value="8800"></label><label>Test Target<input data-test-number="2" value="6000"></label><div class="span2 range-row"><label>Live Test<input data-test-range="2" type="range" min="992" max="8800" value="6000"></label><button type="button" data-move="2">Move</button></div><div class="span2 mini-actions"><button type="button" data-goto="min" data-channel="2">Go Min</button><button type="button" data-goto="center" data-channel="2">Go Center</button><button type="button" data-goto="max" data-channel="2">Go Max</button></div><div class="span2 capture"><button type="button" data-copy="min" data-channel="2">Use Current as Min</button><button type="button" data-copy="center" data-channel="2">Use Current as Center</button><button type="button" data-copy="max" data-channel="2">Use Current as Max</button></div></div><p class="help">Neck movement should stay comfortably inside the mechanical stop points.</p><p class="cal-status" data-status="2"></p></section>
+            <section class="card" data-reversed="0"><h2><span class="ch">CH3</span>Left Arm</h2><div class="fields"><label>Saved Min<input data-min="3" value="3200"></label><label>Saved Center<input data-center="3" value="6000"></label><label>Saved Max<input data-max="3" value="12000"></label><label>Test Target<input data-test-number="3" value="6000"></label><div class="span2 range-row"><label>Live Test<input data-test-range="3" type="range" min="3200" max="12000" value="6000"></label><button type="button" data-move="3">Move</button></div><div class="span2 mini-actions"><button type="button" data-goto="min" data-channel="3">Go Min</button><button type="button" data-goto="center" data-channel="3">Go Center</button><button type="button" data-goto="max" data-channel="3">Go Max</button></div><div class="span2 capture"><button type="button" data-copy="min" data-channel="3">Use Current as Min</button><button type="button" data-copy="center" data-channel="3">Use Current as Center</button><button type="button" data-copy="max" data-channel="3">Use Current as Max</button></div></div><p class="help">Arm mode uses the stick up/down axis for this channel. Arm target range is 800-3000 us, shown here as 3200-12000 Maestro units.</p><p class="cal-status" data-status="3"></p></section>
+            <section class="card" data-reversed="1"><h2><span class="ch">CH4</span>Right Arm</h2><div class="fields"><label>Saved Min<input data-min="4" value="3200"></label><label>Saved Center<input data-center="4" value="6000"></label><label>Saved Max<input data-max="4" value="12000"></label><label>Test Target<input data-test-number="4" value="6000"></label><div class="span2 range-row"><label>Live Test<input data-test-range="4" type="range" min="3200" max="12000" value="6000"></label><button type="button" data-move="4">Move</button></div><div class="span2 mini-actions"><button type="button" data-goto="min" data-channel="4">Go Min</button><button type="button" data-goto="center" data-channel="4">Go Center</button><button type="button" data-goto="max" data-channel="4">Go Max</button></div><div class="span2 capture"><button type="button" data-copy="min" data-channel="4">Use Current as Min</button><button type="button" data-copy="center" data-channel="4">Use Current as Center</button><button type="button" data-copy="max" data-channel="4">Use Current as Max</button></div></div><p class="help">Reversed is on. Arm target range is 800-3000 us, shown here as 3200-12000 Maestro units.</p><p class="cal-status" data-status="4"></p></section>
+            <section class="card" data-reversed="0"><h2><span class="ch">CH5</span>Left Elbow</h2><div class="fields"><label>Saved Min<input data-min="5" value="3200"></label><label>Saved Center<input data-center="5" value="6000"></label><label>Saved Max<input data-max="5" value="12000"></label><label>Test Target<input data-test-number="5" value="6000"></label><div class="span2 range-row"><label>Live Test<input data-test-range="5" type="range" min="3200" max="12000" value="6000"></label><button type="button" data-move="5">Move</button></div><div class="span2 mini-actions"><button type="button" data-goto="min" data-channel="5">Go Min</button><button type="button" data-goto="center" data-channel="5">Go Center</button><button type="button" data-goto="max" data-channel="5">Go Max</button></div><div class="span2 capture"><button type="button" data-copy="min" data-channel="5">Use Current as Min</button><button type="button" data-copy="center" data-channel="5">Use Current as Center</button><button type="button" data-copy="max" data-channel="5">Use Current as Max</button></div></div><p class="help">Elbow target range is 800-3000 us, shown here as 3200-12000 Maestro units.</p><p class="cal-status" data-status="5"></p></section>
+            <section class="card" data-reversed="1"><h2><span class="ch">CH6</span>Right Elbow</h2><div class="fields"><label>Saved Min<input data-min="6" value="3200"></label><label>Saved Center<input data-center="6" value="6000"></label><label>Saved Max<input data-max="6" value="12000"></label><label>Test Target<input data-test-number="6" value="6000"></label><div class="span2 range-row"><label>Live Test<input data-test-range="6" type="range" min="3200" max="12000" value="6000"></label><button type="button" data-move="6">Move</button></div><div class="span2 mini-actions"><button type="button" data-goto="min" data-channel="6">Go Min</button><button type="button" data-goto="center" data-channel="6">Go Center</button><button type="button" data-goto="max" data-channel="6">Go Max</button></div><div class="span2 capture"><button type="button" data-copy="min" data-channel="6">Use Current as Min</button><button type="button" data-copy="center" data-channel="6">Use Current as Center</button><button type="button" data-copy="max" data-channel="6">Use Current as Max</button></div></div><p class="help">Reversed is on. Elbow target range is 800-3000 us, shown here as 3200-12000 Maestro units.</p><p class="cal-status" data-status="6"></p></section>
+          </div>
+          <div class="actions"><button type="button">Save Calibration Endpoints</button></div>
+        </form>
+      </section>
+
+      <section class="panel" data-panel="rc" hidden>
+        <form>
+          <div class="grid">
+            <section class="card"><h2><span class="ch">RC1</span>Stick left/right</h2><div class="fields"><label>Min<input data-rc-min="0" value="172"></label><label>Center<input data-rc-center="0" value="1048"></label><label>Max<input data-rc-max="0" value="1811"></label><label>Deadband<input value="40"></label><label class="span2">Live value<input data-rc-live="0" readonly value="1048"></label><div class="span2 capture"><button type="button" data-rc-copy="min" data-rc-channel="0">Use Live as Min</button><button type="button" data-rc-copy="center" data-rc-channel="0">Use Live as Center</button><button type="button" data-rc-copy="max" data-rc-channel="0">Use Live as Max</button></div></div><p class="help">Calibrate this axis if neck rotate drifts when the stick is released.</p></section>
+            <section class="card"><h2><span class="ch">RC2</span>Stick up/down</h2><div class="fields"><label>Min<input data-rc-min="1" value="172"></label><label>Center<input data-rc-center="1" value="992"></label><label>Max<input data-rc-max="1" value="1811"></label><label>Deadband<input value="40"></label><label class="span2">Live value<input data-rc-live="1" readonly value="992"></label><div class="span2 capture"><button type="button" data-rc-copy="min" data-rc-channel="1">Use Live as Min</button><button type="button" data-rc-copy="center" data-rc-channel="1">Use Live as Center</button><button type="button" data-rc-copy="max" data-rc-channel="1">Use Live as Max</button></div></div><p class="help">Capture center with the stick released so live head tilt returns to the saved servo center.</p></section>
+            <section class="card"><h2><span class="ch">RC3-6</span>Buttons/direct control</h2><div class="fields"><label>Min<input value="172"></label><label>Center<input value="992"></label><label>Max<input value="1811"></label><label>Deadband<input value="40"></label><label class="span2">Live value<input readonly value="1811"></label></div><p class="help">The firmware also stores RC input calibration for button/direct-control channels CH3 through CH6.</p></section>
+          </div>
+          <div class="actions"><button type="button">Save RC Input Calibration</button></div>
+        </form>
+      </section>
+
+      <section class="panel" data-panel="buttons" hidden>
+        <form>
+          <div class="grid">
+            <section class="card"><h2><span class="ch">RC3</span>Button 3</h2><div class="fields"><label class="span2">Action<select data-action-select="0"><option value="0">Disabled</option><option value="1" selected>Built-In Sequence</option><option value="2">Maestro Sequence</option><option value="3">Direct Servo Control</option><option value="4">Sound</option><option value="5">Combo</option></select></label><label class="span2" data-built-label="0">Built-In Sequence<select data-built-field="0"><option value="0" selected>Auto Mode Toggle</option><option value="1">Arm Mode Toggle</option><option value="2">Right Arm Wave</option><option value="3">Surprise No</option></select></label><label data-maestro-label="0">Maestro Sequence<input data-maestro-field="0" type="number" min="0" max="127" value="0"></label><label data-maestro-label="0">Holdoff ms<input data-maestro-field="0" type="number" min="0" max="30000" step="100" value="2500"></label><label class="span2" data-direct-label="0">Direct Servo Channel<select data-direct-field="0"><option value="2" selected>Maestro CH2 - Neck Rotate</option><option value="3">Maestro CH3 - Left Arm</option><option value="4">Maestro CH4 - Right Arm</option><option value="5">Maestro CH5 - Left Elbow</option><option value="6">Maestro CH6 - Right Elbow</option></select></label><label data-sound-label="0">Sound Mode<select data-sound-field="0" data-sound-mode-select="0"><option selected>Specific Track</option><option>Random Category</option></select></label><label data-sound-label="0">Sound Category<select data-sound-field="0" data-sound-category-select="0" disabled><option selected>Cute (1-25)</option><option>Phrases (26-50)</option><option>Sentences (51-75)</option><option>Burps and Slurps (76-100)</option><option>Sound Combos (101-125)</option></select></label><label data-sound-label="0">Sound Track<input data-sound-field="0" type="number" min="1" max="9999" value="1"></label><label data-sound-label="0">Sound Volume<input data-sound-field="0" type="number" min="0" max="30" value="20"></label><label class="span2" data-combo-label="0">Combo Slot<select data-combo-field="0"><option selected>Combo 1</option><option>Combo 2</option><option>Combo 3</option><option>Combo 4</option></select></label></div><p class="help">Sound and Combo actions fire once when the button is pressed.</p></section>
+            <section class="card"><h2><span class="ch">RC4</span>Button 4</h2><div class="fields"><label class="span2">Action<select data-action-select="1"><option value="0">Disabled</option><option value="1" selected>Built-In Sequence</option><option value="2">Maestro Sequence</option><option value="3">Direct Servo Control</option><option value="4">Sound</option><option value="5">Combo</option></select></label><label class="span2" data-built-label="1">Built-In Sequence<select data-built-field="1"><option value="0">Auto Mode Toggle</option><option value="1" selected>Arm Mode Toggle</option><option value="2">Right Arm Wave</option><option value="3">Surprise No</option></select></label><label data-maestro-label="1">Maestro Sequence<input data-maestro-field="1" type="number" min="0" max="127" value="1"></label><label data-maestro-label="1">Holdoff ms<input data-maestro-field="1" type="number" min="0" max="30000" step="100" value="2500"></label><label class="span2" data-direct-label="1">Direct Servo Channel<select data-direct-field="1"><option value="2" selected>Maestro CH2 - Neck Rotate</option><option value="3">Maestro CH3 - Left Arm</option><option value="4">Maestro CH4 - Right Arm</option><option value="5">Maestro CH5 - Left Elbow</option><option value="6">Maestro CH6 - Right Elbow</option></select></label><label data-sound-label="1">Sound Mode<select data-sound-field="1" data-sound-mode-select="1"><option selected>Specific Track</option><option>Random Category</option></select></label><label data-sound-label="1">Sound Category<select data-sound-field="1" data-sound-category-select="1" disabled><option selected>Cute (1-25)</option><option>Phrases (26-50)</option><option>Sentences (51-75)</option><option>Burps and Slurps (76-100)</option><option>Sound Combos (101-125)</option></select></label><label data-sound-label="1">Sound Track<input data-sound-field="1" type="number" min="1" max="9999" value="1"></label><label data-sound-label="1">Sound Volume<input data-sound-field="1" type="number" min="0" max="30" value="20"></label><label class="span2" data-combo-label="1">Combo Slot<select data-combo-field="1"><option>Combo 1</option><option selected>Combo 2</option><option>Combo 3</option><option>Combo 4</option></select></label></div><p class="help">Sound and Combo actions fire once when the button is pressed.</p></section>
+            <section class="card"><h2><span class="ch">RC5</span>Button 5</h2><div class="fields"><label class="span2">Action<select data-action-select="2"><option value="0">Disabled</option><option value="1" selected>Built-In Sequence</option><option value="2">Maestro Sequence</option><option value="3">Direct Servo Control</option><option value="4">Sound</option><option value="5">Combo</option></select></label><label class="span2" data-built-label="2">Built-In Sequence<select data-built-field="2"><option value="0">Auto Mode Toggle</option><option value="1">Arm Mode Toggle</option><option value="2" selected>Right Arm Wave</option><option value="3">Surprise No</option></select></label><label data-maestro-label="2">Maestro Sequence<input data-maestro-field="2" type="number" min="0" max="127" value="0"></label><label data-maestro-label="2">Holdoff ms<input data-maestro-field="2" type="number" min="0" max="30000" step="100" value="2500"></label><label class="span2" data-direct-label="2">Direct Servo Channel<select data-direct-field="2"><option value="2">Maestro CH2 - Neck Rotate</option><option value="3" selected>Maestro CH3 - Left Arm</option><option value="4">Maestro CH4 - Right Arm</option><option value="5">Maestro CH5 - Left Elbow</option><option value="6">Maestro CH6 - Right Elbow</option></select></label><label data-sound-label="2">Sound Mode<select data-sound-field="2" data-sound-mode-select="2"><option selected>Specific Track</option><option>Random Category</option></select></label><label data-sound-label="2">Sound Category<select data-sound-field="2" data-sound-category-select="2" disabled><option selected>Cute (1-25)</option><option>Phrases (26-50)</option><option>Sentences (51-75)</option><option>Burps and Slurps (76-100)</option><option>Sound Combos (101-125)</option></select></label><label data-sound-label="2">Sound Track<input data-sound-field="2" type="number" min="1" max="9999" value="1"></label><label data-sound-label="2">Sound Volume<input data-sound-field="2" type="number" min="0" max="30" value="20"></label><label class="span2" data-combo-label="2">Combo Slot<select data-combo-field="2"><option>Combo 1</option><option>Combo 2</option><option selected>Combo 3</option><option>Combo 4</option></select></label></div><p class="help">Sound and Combo actions fire once when the button is pressed.</p></section>
+            <section class="card"><h2><span class="ch">RC6</span>Button 6</h2><div class="fields"><label class="span2">Action<select data-action-select="3"><option value="0">Disabled</option><option value="1" selected>Built-In Sequence</option><option value="2">Maestro Sequence</option><option value="3">Direct Servo Control</option><option value="4">Sound</option><option value="5">Combo</option></select></label><label class="span2" data-built-label="3">Built-In Sequence<select data-built-field="3"><option value="0">Auto Mode Toggle</option><option value="1">Arm Mode Toggle</option><option value="2">Right Arm Wave</option><option value="3" selected>Surprise No</option></select></label><label data-maestro-label="3">Maestro Sequence<input data-maestro-field="3" type="number" min="0" max="127" value="3"></label><label data-maestro-label="3">Holdoff ms<input data-maestro-field="3" type="number" min="0" max="30000" step="100" value="2500"></label><label class="span2" data-direct-label="3">Direct Servo Channel<select data-direct-field="3"><option value="2">Maestro CH2 - Neck Rotate</option><option value="3">Maestro CH3 - Left Arm</option><option value="4" selected>Maestro CH4 - Right Arm</option><option value="5">Maestro CH5 - Left Elbow</option><option value="6">Maestro CH6 - Right Elbow</option></select></label><label data-sound-label="3">Sound Mode<select data-sound-field="3" data-sound-mode-select="3"><option selected>Specific Track</option><option>Random Category</option></select></label><label data-sound-label="3">Sound Category<select data-sound-field="3" data-sound-category-select="3" disabled><option selected>Cute (1-25)</option><option>Phrases (26-50)</option><option>Sentences (51-75)</option><option>Burps and Slurps (76-100)</option><option>Sound Combos (101-125)</option></select></label><label data-sound-label="3">Sound Track<input data-sound-field="3" type="number" min="1" max="9999" value="1"></label><label data-sound-label="3">Sound Volume<input data-sound-field="3" type="number" min="0" max="30" value="20"></label><label class="span2" data-combo-label="3">Combo Slot<select data-combo-field="3"><option>Combo 1</option><option>Combo 2</option><option>Combo 3</option><option selected>Combo 4</option></select></label></div><p class="help">Sound and Combo actions fire once when the button is pressed.</p></section>
+          </div>
+          <div class="command-grid" style="margin-top:14px">
+            <section class="card">
+              <h2><span class="ch">Built-in</span>Sequence Test</h2>
+              <div class="fields">
+                <label class="span2">Built-In Sequence
+                  <select id="builtCommand">
+                    <option value="0">Auto Mode Toggle</option>
+                    <option value="1">Arm Mode Toggle</option>
+                    <option value="2">Right Arm Wave</option>
+                    <option value="3">Surprise No</option>
+                  </select>
+                </label>
+              </div>
+              <p class="help">Sends the same built-in command used by RC button assignments.</p>
+              <button type="button" data-send-built>Send Built-in Sequence</button>
+              <p class="status" id="builtStatus"></p>
+            </section>
+            <section class="card">
+              <h2><span class="ch">Maestro</span>Sequence Test</h2>
+              <div class="fields">
+                <label>Sequence<input id="maestroSeq" type="number" min="0" max="127" value="0"></label>
+                <label>Holdoff ms<input id="maestroHold" type="number" min="0" max="30000" step="100" value="2500"></label>
+              </div>
+              <p class="help">Sends Maestro compact serial <code>Restart Script at Subroutine</code>. Enter <code>00</code>, <code>01</code>, <code>02</code>, etc.</p>
+              <button class="secondary" type="button" data-send-maestro>Send Maestro Sequence</button>
+              <p class="status" id="maestroStatus"></p>
+            </section>
+            <section class="card">
+              <h2><span class="ch">DFPlayer</span>Sound Test</h2>
+              <div class="fields">
+                <label>Track<input id="soundTrack" type="number" min="1" max="9999" value="1"></label>
+                <label>Volume<input id="soundVolume" type="number" min="0" max="30" value="20"></label>
+              </div>
+              <p class="help">Plays numbered MP3 files from the DFPlayer Mini microSD card. Commands are sent one-way to the DFPlayer RX pin.</p>
+              <button type="button" data-play-sound>Play Track</button>
+              <button class="secondary" type="button" data-stop-sound>Stop Sound</button>
+              <p class="status" id="soundStatus">DFPlayer command link ready.</p>
+            </section>
+          </div>
+          <div class="actions"><button type="button">Save Button Assignments</button></div>
+        </form>
+      </section>
+
+      <section class="panel" data-panel="combo" hidden>
+        <form>
+          <div class="grid">
+            <section class="card combo-card" data-combo-card="0">
+              <h2><span class="ch">1</span>Combo 1</h2>
+              <div class="fields">
+                <div class="toggle span2"><label for="comboEnabled0">Enabled</label><input id="comboEnabled0" type="checkbox" checked></div>
+                <label class="span2">Name<input maxlength="24" value="Combo 1"></label>
+              </div>
+              <div class="fields combo-step" data-combo-step="0-0"><label><span class="ch">Step 1</span> Type<select data-combo-type="0-0"><option value="0">Disabled</option><option value="1" selected>Built-In Sequence</option><option value="2">Maestro Sequence</option><option value="3">Play sound</option><option value="4">Stop sound</option><option value="5">Set sound volume</option><option value="6">Delay</option></select></label><label data-combo-field="0-0" data-for="built">Built-in Sequence<select><option selected>Auto Mode Toggle</option><option>Arm Mode Toggle</option><option>Right Arm Wave</option><option>Surprise No</option></select></label><label data-combo-field="0-0" data-for="maestro">Maestro Sequence<input type="number" min="0" max="127" value="0"></label><label data-combo-field="0-0" data-for="sound-play">Sound Track<input type="number" min="1" max="9999" value="1"></label><label data-combo-field="0-0" data-for="sound-volume">Sound Volume<input type="number" min="0" max="30" value="22"></label><label data-combo-field="0-0" data-for="hold">Holdoff ms<input type="number" min="0" max="30000" step="100" value="2500"></label><label data-combo-field="0-0" data-for="delay">Delay ms<input type="number" min="0" max="30000" step="100" value="500"></label></div>
+              <div class="fields combo-step" data-combo-step="0-1"><label><span class="ch">Step 2</span> Type<select data-combo-type="0-1"><option value="0">Disabled</option><option value="1">Built-In Sequence</option><option value="2">Maestro Sequence</option><option value="3" selected>Play sound</option><option value="4">Stop sound</option><option value="5">Set sound volume</option><option value="6">Delay</option></select></label><label data-combo-field="0-1" data-for="built">Built-in Sequence<select><option>Auto Mode Toggle</option><option>Arm Mode Toggle</option><option>Right Arm Wave</option><option>Surprise No</option></select></label><label data-combo-field="0-1" data-for="maestro">Maestro Sequence<input type="number" min="0" max="127" value="0"></label><label data-combo-field="0-1" data-for="sound-play">Sound Track<input type="number" min="1" max="9999" value="1"></label><label data-combo-field="0-1" data-for="sound-volume">Sound Volume<input type="number" min="0" max="30" value="22"></label><label data-combo-field="0-1" data-for="hold">Holdoff ms<input type="number" min="0" max="30000" step="100" value="500"></label><label data-combo-field="0-1" data-for="delay">Delay ms<input type="number" min="0" max="30000" step="100" value="500"></label></div>
+              <div class="fields combo-step hidden" data-combo-step="0-2"><label><span class="ch">Step 3</span> Type<select data-combo-type="0-2"><option value="0">Disabled</option><option value="1">Built-In Sequence</option><option value="2">Maestro Sequence</option><option value="3">Play sound</option><option value="4">Stop sound</option><option value="5">Set sound volume</option><option value="6">Delay</option></select></label><label data-combo-field="0-2" data-for="built">Built-in Sequence<select><option>Auto Mode Toggle</option><option>Arm Mode Toggle</option><option>Right Arm Wave</option><option>Surprise No</option></select></label><label data-combo-field="0-2" data-for="maestro">Maestro Sequence<input type="number" min="0" max="127" value="0"></label><label data-combo-field="0-2" data-for="sound-play">Sound Track<input type="number" min="1" max="9999" value="1"></label><label data-combo-field="0-2" data-for="sound-volume">Sound Volume<input type="number" min="0" max="30" value="22"></label><label data-combo-field="0-2" data-for="hold">Holdoff ms<input type="number" min="0" max="30000" step="100" value="0"></label><label data-combo-field="0-2" data-for="delay">Delay ms<input type="number" min="0" max="30000" step="100" value="500"></label></div>
+              <p class="help">Choose a type for each step, then fill in only the fields shown for that step.</p>
+              <div class="combo-actions"><button class="combo-add" type="button" data-add-combo-step="0">Add Step</button><button class="combo-remove" type="button" data-remove-last-combo-step="0">Remove Step</button><button class="combo-test" type="button" data-send-combo="0">Test Combo</button><button class="combo-remove" type="button" data-delete-combo="0">Remove Combo</button></div>
+              <p class="status" id="comboStatus0"></p>
+            </section>
+            <section class="card combo-card hidden" data-combo-card="1">
+              <h2><span class="ch">2</span>Combo 2</h2>
+              <div class="fields">
+                <div class="toggle span2"><label for="comboEnabled1">Enabled</label><input id="comboEnabled1" type="checkbox" checked></div>
+                <label class="span2">Name<input maxlength="24" value="Combo 2"></label>
+              </div>
+              <div class="fields combo-step hidden" data-combo-step="1-0"><label><span class="ch">Step 1</span> Type<select data-combo-type="1-0"><option value="0">Disabled</option><option value="1">Built-In Sequence</option><option value="2">Maestro Sequence</option><option value="3">Play sound</option><option value="4">Stop sound</option><option value="5">Set sound volume</option><option value="6">Delay</option></select></label><label data-combo-field="1-0" data-for="built">Built-in Sequence<select><option>Auto Mode Toggle</option><option>Arm Mode Toggle</option><option>Right Arm Wave</option><option>Surprise No</option></select></label><label data-combo-field="1-0" data-for="maestro">Maestro Sequence<input type="number" min="0" max="127" value="0"></label><label data-combo-field="1-0" data-for="sound-play">Sound Track<input type="number" min="1" max="9999" value="1"></label><label data-combo-field="1-0" data-for="sound-volume">Sound Volume<input type="number" min="0" max="30" value="22"></label><label data-combo-field="1-0" data-for="hold">Holdoff ms<input type="number" min="0" max="30000" step="100" value="0"></label><label data-combo-field="1-0" data-for="delay">Delay ms<input type="number" min="0" max="30000" step="100" value="500"></label></div>
+              <p class="help">New combos stay hidden until you add them.</p>
+              <div class="combo-actions"><button class="combo-add" type="button" data-add-combo-step="1">Add Step</button><button class="combo-remove" type="button" data-remove-last-combo-step="1">Remove Step</button><button class="combo-test" type="button" data-send-combo="1">Test Combo</button><button class="combo-remove" type="button" data-delete-combo="1">Remove Combo</button></div>
+              <p class="status" id="comboStatus1"></p>
+            </section>
+          </div>
+          <button class="combo-add-wide" type="button" data-add-combo>Add Combo</button>
+          <div class="actions"><button type="button">Save Combo Sequences</button></div>
+        </form>
+      </section>
+
+      <section class="panel" data-panel="settings">
+        <div class="command-grid">
+          <section class="card">
+            <h2><span class="ch">Network</span>Setup Access Point</h2>
+            <form>
+              <div class="fields">
+                <label class="span2">AP Name<input maxlength="32" value="Grogu Setup"></label>
+                <label class="span2">AP Password<input maxlength="64" type="password" placeholder="Optional, 8+ characters"></label>
+                <label>Settings User<input maxlength="16" value="admin"></label>
+                <label>Settings Password<input maxlength="32" type="password" placeholder="Optional"></label>
+              </div>
+              <p class="help">Leave passwords blank for open access. AP name/password changes take effect after reboot; settings password protects this setup area immediately after save.</p>
+              <button class="secondary" type="button">Save Network Settings</button>
+            </form>
+          </section>
+          <section class="card">
+            <h2><span class="ch">Export</span>Backup Settings</h2>
+            <p class="help">Download a JSON backup of servo limits, motion tuning, and button assignments before flashing or experimenting.</p>
+            <button type="button" data-export-settings>Download Settings JSON</button>
+            <p class="status" id="exportStatus"></p>
+          </section>
+          <section class="card">
+            <h2><span class="ch">Import</span>Restore Settings</h2>
+            <form>
+              <label class="span2">Settings JSON
+                <textarea id="settingsJson" spellcheck="false" placeholder="Paste exported settings JSON here"></textarea>
+              </label>
+              <p class="help">Import overwrites saved settings in ESP32 flash, reapplies Maestro speed/acceleration, and returns to this tab.</p>
+              <button class="secondary" type="button" data-import-settings>Import Settings JSON</button>
+              <p class="status" id="importStatus"></p>
+            </form>
+          </section>
+        </div>
+      </section>
+
+      <section class="panel" data-panel="control" hidden>
+        <form>
+          <div class="grid">
+            <section class="card">
+              <h2><span class="ch">Control</span>Public Screen</h2>
+              <div class="toggle span2"><label for="ctlLive">Enable Live RC Control</label><input id="ctlLive" type="checkbox"></div>
+              <p class="help">Enable guest-facing live servo sliders on the Control screen. Each slider only sends movement while its servo toggle is active.</p>
+
+              <h2 style="margin-top:16px"><span class="ch">Movements</span>Add Or Remove Buttons</h2>
+              <div class="fields combo-step" data-control-slot="movement"><div class="toggle span2"><label for="cm0en">Button 1</label><input id="cm0en" type="checkbox" checked></div><label>Label<input maxlength="16" value="Wave"></label><label>Action<select><option>Auto Mode Toggle</option><option>Arm Mode Toggle</option><option selected>Right Arm Wave</option><option>Surprise No</option><option>Maestro Sequence</option></select></label><label>Maestro Seq<input type="number" min="0" max="127" value="0"></label><label>Holdoff ms<input type="number" min="0" max="30000" step="100" value="2500"></label></div>
+              <div class="fields combo-step hidden" data-control-slot="movement"><div class="toggle span2"><label for="cm1en">Button 2</label><input id="cm1en" type="checkbox"></div><label>Label<input maxlength="16" value="Surprise No"></label><label>Action<select><option>Auto Mode Toggle</option><option>Arm Mode Toggle</option><option>Right Arm Wave</option><option selected>Surprise No</option><option>Maestro Sequence</option></select></label><label>Maestro Seq<input type="number" min="0" max="127" value="3"></label><label>Holdoff ms<input type="number" min="0" max="30000" step="100" value="2500"></label></div>
+              <div class="fields combo-step hidden" data-control-slot="movement"><div class="toggle span2"><label for="cm2en">Button 3</label><input id="cm2en" type="checkbox"></div><label>Label<input maxlength="16" value="Auto Mode"></label><label>Action<select><option selected>Auto Mode Toggle</option><option>Arm Mode Toggle</option><option>Right Arm Wave</option><option>Surprise No</option><option>Maestro Sequence</option></select></label><label>Maestro Seq<input type="number" min="0" max="127" value="0"></label><label>Holdoff ms<input type="number" min="0" max="30000" step="100" value="2500"></label></div>
+              <div class="fields combo-step hidden" data-control-slot="movement"><div class="toggle span2"><label for="cm3en">Button 4</label><input id="cm3en" type="checkbox"></div><label>Label<input maxlength="16" value="Arm Mode"></label><label>Action<select><option>Auto Mode Toggle</option><option selected>Arm Mode Toggle</option><option>Right Arm Wave</option><option>Surprise No</option><option>Maestro Sequence</option></select></label><label>Maestro Seq<input type="number" min="0" max="127" value="1"></label><label>Holdoff ms<input type="number" min="0" max="30000" step="100" value="2500"></label></div>
+              <div class="fields combo-step hidden" data-control-slot="movement"><div class="toggle span2"><label for="cm4en">Button 5</label><input id="cm4en" type="checkbox"></div><label>Label<input maxlength="16" value="Maestro 1"></label><label>Action<select><option>Auto Mode Toggle</option><option>Arm Mode Toggle</option><option>Right Arm Wave</option><option>Surprise No</option><option selected>Maestro Sequence</option></select></label><label>Maestro Seq<input type="number" min="0" max="127" value="0"></label><label>Holdoff ms<input type="number" min="0" max="30000" step="100" value="2500"></label></div>
+              <div class="fields combo-step hidden" data-control-slot="movement"><div class="toggle span2"><label for="cm5en">Button 6</label><input id="cm5en" type="checkbox"></div><label>Label<input maxlength="16" value="Maestro 2"></label><label>Action<select><option>Auto Mode Toggle</option><option>Arm Mode Toggle</option><option>Right Arm Wave</option><option>Surprise No</option><option selected>Maestro Sequence</option></select></label><label>Maestro Seq<input type="number" min="0" max="127" value="1"></label><label>Holdoff ms<input type="number" min="0" max="30000" step="100" value="2500"></label></div>
+              <div class="combo-actions"><button class="combo-add" type="button" data-add-control-slot="movement">Add Movement</button><button class="combo-remove" type="button" data-remove-control-slot="movement">Remove Movement</button></div>
+
+              <h2 style="margin-top:16px"><span class="ch">Sounds</span>Add Or Remove Buttons</h2>
+              <div class="fields combo-step" data-control-slot="sound"><div class="toggle span2"><label for="cs0en">Button 1</label><input id="cs0en" type="checkbox" checked></div><label>Label<input maxlength="16" value="Cute"></label><label>Sound Mode<select><option>Specific Track</option><option selected>Random Category</option></select></label><label>Category<select><option selected>Cute (1-25)</option><option>Phrases (26-50)</option><option>Sentences (51-75)</option><option>Burps and Slurps (76-100)</option><option>Sound Combos (101-125)</option></select></label><label>Track<input type="number" min="1" max="9999" value="1"></label><label>Volume<input type="number" min="0" max="30" value="22"></label></div>
+              <div class="fields combo-step hidden" data-control-slot="sound"><div class="toggle span2"><label for="cs1en">Button 2</label><input id="cs1en" type="checkbox"></div><label>Label<input maxlength="16" value="Phrases"></label><label>Sound Mode<select><option>Specific Track</option><option selected>Random Category</option></select></label><label>Category<select><option>Cute (1-25)</option><option selected>Phrases (26-50)</option><option>Sentences (51-75)</option><option>Burps and Slurps (76-100)</option><option>Sound Combos (101-125)</option></select></label><label>Track<input type="number" min="1" max="9999" value="26"></label><label>Volume<input type="number" min="0" max="30" value="22"></label></div>
+              <div class="fields combo-step hidden" data-control-slot="sound"><div class="toggle span2"><label for="cs2en">Button 3</label><input id="cs2en" type="checkbox"></div><label>Label<input maxlength="16" value="Sentences"></label><label>Sound Mode<select><option>Specific Track</option><option selected>Random Category</option></select></label><label>Category<select><option>Cute (1-25)</option><option>Phrases (26-50)</option><option selected>Sentences (51-75)</option><option>Burps and Slurps (76-100)</option><option>Sound Combos (101-125)</option></select></label><label>Track<input type="number" min="1" max="9999" value="51"></label><label>Volume<input type="number" min="0" max="30" value="22"></label></div>
+              <div class="fields combo-step hidden" data-control-slot="sound"><div class="toggle span2"><label for="cs3en">Button 4</label><input id="cs3en" type="checkbox"></div><label>Label<input maxlength="16" value="Burps"></label><label>Sound Mode<select><option>Specific Track</option><option selected>Random Category</option></select></label><label>Category<select><option>Cute (1-25)</option><option>Phrases (26-50)</option><option>Sentences (51-75)</option><option selected>Burps and Slurps (76-100)</option><option>Sound Combos (101-125)</option></select></label><label>Track<input type="number" min="1" max="9999" value="76"></label><label>Volume<input type="number" min="0" max="30" value="22"></label></div>
+              <div class="fields combo-step hidden" data-control-slot="sound"><div class="toggle span2"><label for="cs4en">Button 5</label><input id="cs4en" type="checkbox"></div><label>Label<input maxlength="16" value="Combos"></label><label>Sound Mode<select><option>Specific Track</option><option selected>Random Category</option></select></label><label>Category<select><option>Cute (1-25)</option><option>Phrases (26-50)</option><option>Sentences (51-75)</option><option>Burps and Slurps (76-100)</option><option selected>Sound Combos (101-125)</option></select></label><label>Track<input type="number" min="1" max="9999" value="101"></label><label>Volume<input type="number" min="0" max="30" value="22"></label></div>
+              <div class="fields combo-step hidden" data-control-slot="sound"><div class="toggle span2"><label for="cs5en">Button 6</label><input id="cs5en" type="checkbox"></div><label>Label<input maxlength="16" value="Sound 6"></label><label>Sound Mode<select><option selected>Specific Track</option><option>Random Category</option></select></label><label>Category<select><option selected>Cute (1-25)</option><option>Phrases (26-50)</option><option>Sentences (51-75)</option><option>Burps and Slurps (76-100)</option><option>Sound Combos (101-125)</option></select></label><label>Track<input type="number" min="1" max="9999" value="6"></label><label>Volume<input type="number" min="0" max="30" value="22"></label></div>
+              <div class="combo-actions"><button class="combo-add" type="button" data-add-control-slot="sound">Add Sound</button><button class="combo-remove" type="button" data-remove-control-slot="sound">Remove Sound</button></div>
+
+              <h2 style="margin-top:16px"><span class="ch">Combo Sequences</span>Add Or Remove Buttons</h2>
+              <div class="fields combo-step" data-control-slot="combo"><div class="toggle span2"><label for="cc0en">Button 1</label><input id="cc0en" type="checkbox" checked></div><label>Label<input maxlength="16" value="Combo 1"></label><label>Combo Slot<select><option selected>Combo 1</option><option>Combo 2</option><option>Combo 3</option><option>Combo 4</option></select></label></div>
+              <div class="fields combo-step hidden" data-control-slot="combo"><div class="toggle span2"><label for="cc1en">Button 2</label><input id="cc1en" type="checkbox"></div><label>Label<input maxlength="16" value="Combo 2"></label><label>Combo Slot<select><option>Combo 1</option><option selected>Combo 2</option><option>Combo 3</option><option>Combo 4</option></select></label></div>
+              <div class="fields combo-step hidden" data-control-slot="combo"><div class="toggle span2"><label for="cc2en">Button 3</label><input id="cc2en" type="checkbox"></div><label>Label<input maxlength="16" value="Combo 3"></label><label>Combo Slot<select><option>Combo 1</option><option>Combo 2</option><option selected>Combo 3</option><option>Combo 4</option></select></label></div>
+              <div class="fields combo-step hidden" data-control-slot="combo"><div class="toggle span2"><label for="cc3en">Button 4</label><input id="cc3en" type="checkbox"></div><label>Label<input maxlength="16" value="Combo 4"></label><label>Combo Slot<select><option>Combo 1</option><option>Combo 2</option><option>Combo 3</option><option selected>Combo 4</option></select></label></div>
+              <div class="fields combo-step hidden" data-control-slot="combo"><div class="toggle span2"><label for="cc4en">Button 5</label><input id="cc4en" type="checkbox"></div><label>Label<input maxlength="16" value="Combo 5"></label><label>Combo Slot<select><option selected>Combo 1</option><option>Combo 2</option><option>Combo 3</option><option>Combo 4</option></select></label></div>
+              <div class="fields combo-step hidden" data-control-slot="combo"><div class="toggle span2"><label for="cc5en">Button 6</label><input id="cc5en" type="checkbox"></div><label>Label<input maxlength="16" value="Combo 6"></label><label>Combo Slot<select><option>Combo 1</option><option selected>Combo 2</option><option>Combo 3</option><option>Combo 4</option></select></label></div>
+              <div class="combo-actions"><button class="combo-add" type="button" data-add-control-slot="combo">Add Combo Sequence</button><button class="combo-remove" type="button" data-remove-control-slot="combo">Remove Combo Sequence</button></div>
+
+              <p class="help">Use Add to reveal another button slot, or Remove to hide the last visible slot. Hidden slots keep their labels/settings but are unchecked so they do not appear on the public Control screen.</p>
+              <button class="secondary" type="button">Save Control Screen</button>
+            </section>
+          </div>
+        </form>
+      </section>
+
+      <p class="note">Connected to <strong>Grogu Setup</strong>. Home page: <strong>192.168.4.1</strong>.</p>
+    </main>
+
+    <script>
+      function setButtonFields(i) {
+        const action = document.querySelector('[data-action-select="' + i + '"]');
+        if (!action) return;
+        const built = action.value === "1";
+        const maestro = action.value === "2";
+        const direct = action.value === "3";
+        const sound = action.value === "4";
+        const combo = action.value === "5";
+        const mode = document.querySelector('[data-sound-mode-select="' + i + '"]');
+        const category = document.querySelector('[data-sound-category-select="' + i + '"]');
+        document.querySelectorAll('[data-built-field="' + i + '"]').forEach((field) => field.disabled = !built);
+        document.querySelectorAll('[data-maestro-field="' + i + '"]').forEach((field) => field.disabled = !maestro);
+        document.querySelectorAll('[data-direct-field="' + i + '"]').forEach((field) => field.disabled = !direct);
+        document.querySelectorAll('[data-sound-field="' + i + '"]').forEach((field) => field.disabled = !sound);
+        if (category) category.disabled = !sound || !mode || mode.value !== "Random Category";
+        document.querySelectorAll('[data-combo-field="' + i + '"]').forEach((field) => field.disabled = !combo);
+        document.querySelectorAll('[data-built-label="' + i + '"]').forEach((label) => label.classList.toggle("disabled", !built));
+        document.querySelectorAll('[data-maestro-label="' + i + '"]').forEach((label) => label.classList.toggle("disabled", !maestro));
+        document.querySelectorAll('[data-direct-label="' + i + '"]').forEach((label) => label.classList.toggle("disabled", !direct));
+        document.querySelectorAll('[data-sound-label="' + i + '"]').forEach((label) => label.classList.toggle("disabled", !sound));
+        if (category && category.closest("label")) category.closest("label").classList.toggle("disabled", category.disabled);
+        document.querySelectorAll('[data-combo-label="' + i + '"]').forEach((label) => label.classList.toggle("disabled", !combo));
+      }
+
+      document.querySelectorAll("[data-action-select]").forEach((select) => {
+        select.addEventListener("change", () => setButtonFields(select.dataset.actionSelect));
+        setButtonFields(select.dataset.actionSelect);
+      });
+      document.querySelectorAll("[data-sound-mode-select]").forEach((select) => {
+        select.addEventListener("change", () => setButtonFields(select.dataset.soundModeSelect));
+      });
+
+      const livePreviewToggle = document.querySelector("#ctlLive");
+      if (livePreviewToggle) {
+        livePreviewToggle.checked = localStorage.getItem("groguPreviewLiveRc") === "1";
+        livePreviewToggle.addEventListener("change", () => {
+          localStorage.setItem("groguPreviewLiveRc", livePreviewToggle.checked ? "1" : "0");
+        });
+      }
+
+      function updateControlSlotButtons(kind) {
+        const slots = Array.from(document.querySelectorAll('[data-control-slot="' + kind + '"]'));
+        const visible = slots.filter((slot) => !slot.classList.contains("hidden"));
+        document.querySelectorAll('[data-add-control-slot="' + kind + '"]').forEach((button) => button.disabled = visible.length >= slots.length);
+        document.querySelectorAll('[data-remove-control-slot="' + kind + '"]').forEach((button) => button.disabled = visible.length <= 1);
+      }
+      function setControlSlotVisible(slot, on) {
+        slot.classList.toggle("hidden", !on);
+        const checkbox = slot.querySelector('input[type="checkbox"]');
+        if (checkbox) checkbox.checked = on;
+      }
+      document.querySelectorAll("[data-add-control-slot]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const kind = button.dataset.addControlSlot;
+          const slot = Array.from(document.querySelectorAll('[data-control-slot="' + kind + '"]')).find((item) => item.classList.contains("hidden"));
+          if (slot) setControlSlotVisible(slot, true);
+          updateControlSlotButtons(kind);
+        });
+        updateControlSlotButtons(button.dataset.addControlSlot);
+      });
+      document.querySelectorAll("[data-remove-control-slot]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const kind = button.dataset.removeControlSlot;
+          const visible = Array.from(document.querySelectorAll('[data-control-slot="' + kind + '"]')).filter((slot) => !slot.classList.contains("hidden"));
+          const slot = visible.pop();
+          if (slot && visible.length >= 1) setControlSlotVisible(slot, false);
+          updateControlSlotButtons(kind);
+        });
+      });
+
+      function el(query) { return document.querySelector(query); }
+      function currentValue(query) { return Number(el(query).value); }
+      function setStatus(channel, text) {
+        const status = el('[data-status="' + channel + '"]');
+        if (status) status.textContent = text;
+      }
+      function calibrationField(channel, name) {
+        const card = el('[data-status="' + channel + '"]').closest(".card");
+        const reversed = card && card.dataset.reversed === "1";
+        const physical = reversed && name === "min" ? "max" : (reversed && name === "max" ? "min" : name);
+        return el('[data-' + physical + '="' + channel + '"]');
+      }
+      function syncTarget(channel, value) {
+        el('[data-test-range="' + channel + '"]').value = value;
+        el('[data-test-number="' + channel + '"]').value = value;
+      }
+      function previewMove(channel, value) {
+        syncTarget(channel, value);
+        setStatus(channel, "Preview move to " + value);
+      }
+      document.querySelectorAll("[data-test-range]").forEach((range) => {
+        range.addEventListener("input", () => syncTarget(range.dataset.testRange, range.value));
+        range.addEventListener("change", () => previewMove(range.dataset.testRange, range.value));
+      });
+      document.querySelectorAll("[data-test-number]").forEach((number) => {
+        number.addEventListener("change", () => previewMove(number.dataset.testNumber, number.value));
+      });
+      document.querySelectorAll("[data-move]").forEach((button) => {
+        button.addEventListener("click", () => previewMove(button.dataset.move, currentValue('[data-test-number="' + button.dataset.move + '"]')));
+      });
+      document.querySelectorAll("[data-goto]").forEach((button) => {
+        button.addEventListener("click", () => previewMove(button.dataset.channel, Number(calibrationField(button.dataset.channel, button.dataset.goto).value)));
+      });
+      document.querySelectorAll("[data-copy]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const channel = button.dataset.channel;
+          calibrationField(channel, button.dataset.copy).value = currentValue('[data-test-number="' + channel + '"]');
+          setStatus(channel, "Copied current target to " + button.dataset.copy + ". Save to keep it.");
+        });
+      });
+
+      document.querySelector("[data-send-built]").addEventListener("click", () => {
+        const label = document.querySelector("#builtCommand").selectedOptions[0].textContent;
+        document.querySelector("#builtStatus").textContent = "Preview sent built-in command: " + label;
+      });
+
+      document.querySelector("[data-send-maestro]").addEventListener("click", () => {
+        const seq = document.querySelector("#maestroSeq").value;
+        const hold = document.querySelector("#maestroHold").value;
+        document.querySelector("#maestroStatus").textContent = "Preview started Maestro Sequence " + seq + " with " + hold + " ms holdoff.";
+      });
+
+      document.querySelector("[data-play-sound]").addEventListener("click", () => {
+        const track = document.querySelector("#soundTrack").value.padStart(4, "0");
+        const volume = document.querySelector("#soundVolume").value;
+        document.querySelector("#soundStatus").textContent = "Preview playing track " + track + ".mp3 at volume " + volume + ".";
+      });
+
+      document.querySelector("[data-stop-sound]").addEventListener("click", () => {
+        document.querySelector("#soundStatus").textContent = "Preview sound stopped.";
+      });
+
+      const previewSettingsJson = JSON.stringify({
+        format: "grogu-settings-v1",
+        firmware: "0.3.1",
+        ap_ssid: "Grogu Setup",
+        settings_user: "admin",
+        control_live: false,
+        cm0_enabled: true,
+        cm0_label: "Wave",
+        cm0_action: 2,
+        cm0_maestroSequence: 0,
+        cm0_maestroHoldMs: 2500,
+        cm1_enabled: false,
+        cm1_label: "Surprise No",
+        cm1_action: 3,
+        cm1_maestroSequence: 3,
+        cm1_maestroHoldMs: 2500,
+        cm2_enabled: false,
+        cm2_label: "Auto Mode",
+        cm2_action: 0,
+        cm2_maestroSequence: 0,
+        cm2_maestroHoldMs: 2500,
+        cm3_enabled: false,
+        cm3_label: "Arm Mode",
+        cm3_action: 1,
+        cm3_maestroSequence: 1,
+        cm3_maestroHoldMs: 2500,
+        cm4_enabled: false,
+        cm4_label: "Maestro 1",
+        cm4_action: 4,
+        cm4_maestroSequence: 0,
+        cm4_maestroHoldMs: 2500,
+        cm5_enabled: false,
+        cm5_label: "Maestro 2",
+        cm5_action: 4,
+        cm5_maestroSequence: 1,
+        cm5_maestroHoldMs: 2500,
+        cs0_enabled: true,
+        cs0_label: "Cute",
+        cs0_mode: 1,
+        cs0_category: 0,
+        cs0_track: 1,
+        cs0_volume: 22,
+        cs1_enabled: false,
+        cs1_label: "Phrases",
+        cs1_mode: 1,
+        cs1_category: 1,
+        cs1_track: 26,
+        cs1_volume: 22,
+        cs2_enabled: false,
+        cs2_label: "Sentences",
+        cs2_mode: 1,
+        cs2_category: 2,
+        cs2_track: 51,
+        cs2_volume: 22,
+        cs3_enabled: false,
+        cs3_label: "Burps",
+        cs3_mode: 1,
+        cs3_category: 3,
+        cs3_track: 76,
+        cs3_volume: 22,
+        cs4_enabled: false,
+        cs4_label: "Combos",
+        cs4_mode: 1,
+        cs4_category: 4,
+        cs4_track: 101,
+        cs4_volume: 22,
+        cs5_enabled: false,
+        cs5_label: "Sound 6",
+        cs5_mode: 0,
+        cs5_category: 0,
+        cs5_track: 6,
+        cs5_volume: 22,
+        cc0_enabled: true,
+        cc0_label: "Combo 1",
+        cc0_comboIndex: 0,
+        cc1_enabled: false,
+        cc1_label: "Combo 2",
+        cc1_comboIndex: 1,
+        cc2_enabled: false,
+        cc2_label: "Combo 3",
+        cc2_comboIndex: 2,
+        cc3_enabled: false,
+        cc3_label: "Combo 4",
+        cc3_comboIndex: 3,
+        cc4_enabled: false,
+        cc4_label: "Combo 5",
+        cc4_comboIndex: 0,
+        cc5_enabled: false,
+        cc5_label: "Combo 6",
+        cc5_comboIndex: 1,
+        s0_min: 3000,
+        s0_center: 6000,
+        s0_max: 8800,
+        s0_reversed: false,
+        b0_actionType: 1,
+        b0_builtInAction: 0,
+        b0_soundMode: 0,
+        b0_soundCategory: 0,
+        b0_soundTrack: 1,
+        b0_soundVolume: 20,
+        r0_min: 172,
+        r0_center: 1048,
+        r0_max: 1811,
+        r0_deadband: 40
+      }, null, 2);
+
+      document.querySelectorAll("[data-rc-copy]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const channel = button.dataset.rcChannel;
+          const live = document.querySelector('[data-rc-live="' + channel + '"]').value;
+          document.querySelector('[data-rc-' + button.dataset.rcCopy + '="' + channel + '"]').value = live;
+        });
+      });
+
+      document.querySelector("[data-export-settings]").addEventListener("click", () => {
+        document.querySelector("#settingsJson").value = previewSettingsJson;
+        document.querySelector("#exportStatus").textContent = "Preview JSON copied into the import box.";
+      });
+
+      document.querySelector("[data-import-settings]").addEventListener("click", () => {
+        const value = document.querySelector("#settingsJson").value.trim();
+        document.querySelector("#importStatus").textContent = value.includes('"grogu-settings-v1"') ? "Preview import accepted." : "Preview import needs grogu-settings-v1 JSON.";
+      });
+
+      function setComboFields(id) {
+        const type = document.querySelector('[data-combo-type="' + id + '"]');
+        if (!type) return;
+        const step = type.closest(".combo-step");
+        const active = step && !step.classList.contains("hidden");
+        const value = active ? type.value : "0";
+        document.querySelectorAll('[data-combo-field="' + id + '"]').forEach((label) => {
+          const field = label.dataset.for;
+          let show = false;
+          if (value === "1") show = field === "built";
+          else if (value === "2") show = field === "maestro" || field === "hold";
+          else if (value === "3") show = field === "sound-play" || field === "sound-volume" || field === "hold";
+          else if (value === "5") show = field === "sound-volume";
+          else if (value === "6") show = field === "delay";
+          label.classList.toggle("hidden", !show);
+          label.querySelectorAll("input,select").forEach((control) => control.disabled = !show);
+        });
+        updateAddStepButton(id.split("-")[0]);
+      }
+
+      function updateAddStepButton(combo) {
+        const steps = Array.from(document.querySelectorAll('[data-combo-step^="' + combo + '-"]'));
+        const canAdd = steps.some((step) => step.classList.contains("hidden")) || steps.length < 10;
+        document.querySelectorAll('[data-add-combo-step="' + combo + '"]').forEach((button) => button.disabled = !canAdd);
+        const canRemove = steps.some((step) => !step.classList.contains("hidden"));
+        document.querySelectorAll('[data-remove-last-combo-step="' + combo + '"]').forEach((button) => button.disabled = !canRemove);
+      }
+
+      function updateAddComboButton() {
+        const canAdd = !!document.querySelector(".combo-card.hidden");
+        document.querySelectorAll("[data-add-combo]").forEach((button) => button.disabled = !canAdd);
+      }
+
+      function removeComboStep(id) {
+        const step = document.querySelector('[data-combo-step="' + id + '"]');
+        const type = document.querySelector('[data-combo-type="' + id + '"]');
+        if (type) type.value = "0";
+        if (step) step.classList.add("hidden");
+        setComboFields(id);
+      }
+
+      function removeLastComboStep(combo) {
+        const steps = Array.from(document.querySelectorAll('[data-combo-step^="' + combo + '-"]:not(.hidden)'));
+        const step = steps.pop();
+        if (step) removeComboStep(step.dataset.comboStep);
+        updateAddStepButton(combo);
+      }
+
+      function createPreviewComboStep(combo) {
+        const steps = Array.from(document.querySelectorAll('[data-combo-step^="' + combo + '-"]'));
+        if (steps.length >= 10) return null;
+        const index = steps.length;
+        const id = combo + "-" + index;
+        const step = steps[0].cloneNode(true);
+        step.classList.add("hidden");
+        step.dataset.comboStep = id;
+        step.querySelector(".ch").textContent = "Step " + (index + 1);
+        step.querySelectorAll("[data-combo-type]").forEach((control) => { control.dataset.comboType = id; control.value = "0"; });
+        step.querySelectorAll("[data-combo-field]").forEach((label) => { label.dataset.comboField = id; });
+        step.querySelectorAll("input").forEach((input) => {
+          if (input.type === "number") input.value = input.min && Number(input.min) > 0 ? input.min : "0";
+        });
+        steps[steps.length - 1].after(step);
+        const type = step.querySelector("[data-combo-type]");
+        type.addEventListener("change", () => setComboFields(type.dataset.comboType));
+        setComboFields(id);
+        return step;
+      }
+
+      document.querySelectorAll("[data-combo-type]").forEach((select) => {
+        select.addEventListener("change", () => setComboFields(select.dataset.comboType));
+        setComboFields(select.dataset.comboType);
+      });
+      document.querySelectorAll("[data-remove-last-combo-step]").forEach((button) => {
+        button.addEventListener("click", () => removeLastComboStep(button.dataset.removeLastComboStep));
+      });
+      document.querySelectorAll("[data-add-combo-step]").forEach((button) => {
+        button.addEventListener("click", () => {
+          let step = document.querySelector('.combo-step.hidden[data-combo-step^="' + button.dataset.addComboStep + '-"]');
+          if (!step) step = createPreviewComboStep(button.dataset.addComboStep);
+          if (!step) return;
+          step.classList.remove("hidden");
+          const type = step.querySelector("[data-combo-type]");
+          if (type && type.value === "0") type.value = "1";
+          if (type) setComboFields(type.dataset.comboType);
+        });
+        updateAddStepButton(button.dataset.addComboStep);
+      });
+      document.querySelectorAll("[data-add-combo]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const combo = document.querySelector(".combo-card.hidden");
+          if (!combo) return;
+          combo.classList.remove("hidden");
+          updateAddComboButton();
+        });
+      });
+      document.querySelectorAll("[data-delete-combo]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const combo = document.querySelector('[data-combo-card="' + button.dataset.deleteCombo + '"]');
+          if (!combo) return;
+          combo.querySelectorAll("[data-combo-step]").forEach((step) => removeComboStep(step.dataset.comboStep));
+          combo.classList.add("hidden");
+          updateAddComboButton();
+        });
+      });
+      document.querySelectorAll("[data-send-combo]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const status = document.querySelector("#comboStatus" + button.dataset.sendCombo);
+          if (status) status.textContent = "Preview combo " + (Number(button.dataset.sendCombo) + 1) + " sent.";
+        });
+      });
+      updateAddComboButton();
+
+      function activateTab(target) {
+        document.querySelectorAll("[data-tab]").forEach((item) => item.classList.toggle("active", item.dataset.tab === target));
+        document.querySelectorAll("[data-panel]").forEach((panel) => panel.hidden = panel.dataset.panel !== target);
+      }
+      document.querySelectorAll("[data-tab]").forEach((tab) => {
+        tab.addEventListener("click", (event) => {
+          event.preventDefault();
+          activateTab(tab.dataset.tab);
+          history.replaceState(null, "", "#" + tab.dataset.tab);
+        });
+      });
+      const initialTab = new URLSearchParams(location.search).get("tab") || location.hash.replace("#", "");
+      if (initialTab && document.querySelector('[data-tab="' + initialTab + '"]')) activateTab(initialTab);
+    </script>
+  </body>
+</html>

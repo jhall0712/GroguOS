@@ -1,0 +1,286 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Grogu Control Preview</title>
+    <style>
+      :root{--leaf:#6f9a5b;--deep:#263025;--robe:#8a6a45;--paper:#fffdf7;--line:#d8cdb9;--muted:#64715f}
+      *{box-sizing:border-box}
+      body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#eef3e4;color:var(--deep)}
+      main{max-width:760px;margin:auto;padding:18px 14px 28px}
+      header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}.header-left{display:flex;align-items:center;gap:12px;min-width:0}.mode-switch{width:auto;min-height:30px;border:0;background:transparent;color:var(--leaf);font:800 .76rem system-ui;display:flex;align-items:center;gap:8px;padding:0;box-shadow:none}.switch-track{position:relative;width:42px;height:24px;border-radius:999px;background:#a7aea1;box-shadow:inset 0 0 0 1px rgba(38,48,37,.18)}.switch-thumb{position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:#fffdf7;box-shadow:0 2px 5px rgba(38,48,37,.24);transition:transform .16s ease}.mode-switch.active .switch-track{background:#2f7a45}.mode-switch.active .switch-thumb{transform:translateX(18px)}
+      h1{margin:0;color:#355c3a;font-size:2rem;letter-spacing:0}
+      .home{color:#355c3a;font-weight:800;text-decoration:none}
+      .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+      .panel{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:14px}
+      h2{font-size:1rem;margin:0 0 10px;color:#355c3a}
+      .button{width:100%;min-height:56px;border:0;border-radius:8px;background:#355c3a;color:white;font:900 1rem system-ui;box-shadow:0 8px 18px rgba(53,92,58,.18)}
+      .button.alt{background:var(--robe)}
+      .button.warn{background:#9f4c42}
+      .stack{display:grid;gap:10px}
+      .status{min-height:1.4em;color:var(--muted);font-size:.9rem;margin:12px 0 0}
+      .live{grid-column:1/-1}.servo-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.servo-toggle{min-height:48px;background:#4d554b;font-size:.86rem;line-height:1.1;padding:8px}.servo-toggle.active{background:#2f7a45}.live-slider{margin-top:14px;border:1px solid var(--line);border-radius:8px;background:#f8f3e8;padding:12px}.live-slider label{display:flex;justify-content:space-between;gap:12px;color:#355c3a;font-size:.82rem;font-weight:900;text-transform:uppercase}.live-slider input[type=range]{display:block;width:100%;height:34px;margin-top:8px;padding:0;accent-color:#355c3a}.live-slider input[type=range]:disabled{opacity:.55;cursor:not-allowed}.joy-wrap,.mobile-controller{display:none}.joy{position:relative;width:min(28vw,220px);aspect-ratio:1;margin:8px auto 0;border-radius:50%;border:2px solid var(--line);background:radial-gradient(circle,#fffdf7 0 22%,#f8f3e8 23% 100%);touch-action:none}.joy:before,.joy:after{content:"";position:absolute;background:rgba(53,92,58,.18)}.joy:before{left:50%;top:10%;bottom:10%;width:2px}.joy:after{top:50%;left:10%;right:10%;height:2px}.joy-knob{position:absolute;left:50%;top:50%;width:32%;aspect-ratio:1;border-radius:50%;background:#355c3a;box-shadow:0 10px 22px rgba(53,92,58,.25);transform:translate(-50%,-50%)}.mobile-actions{display:grid;gap:8px;align-content:center;max-height:calc(100vh - 76px);overflow:auto}.mobile-actions h2{margin:8px 0 0;font-size:.82rem}.mobile-actions .button{min-height:42px;font-size:.84rem}.joy-wrap h2{font-size:.82rem;text-align:center;margin:0}.joy-wrap .status{text-align:center;font-size:.78rem}.hidden{display:none!important}
+      body.landscape-mode{min-height:100vh;display:grid;place-items:center;overflow:hidden}body.landscape-mode main{width:min(var(--vw,100vw),1024px);height:min(var(--vh,100vh),768px);max-width:none;padding:8px}body.landscape-mode header{margin-bottom:6px}body.landscape-mode h1{font-size:1.25rem}body.landscape-mode .grid{height:calc(100% - 44px)}body.landscape-mode .grid>.panel:not(.live){display:none}body.landscape-mode .live{height:100%;background:transparent;border:0;padding:0;overflow:hidden}body.landscape-mode .live>h2,body.landscape-mode .live>p.status,body.landscape-mode .servo-grid,body.landscape-mode .live-slider{display:none}body.landscape-mode .mobile-controller{display:grid;height:100%;grid-template-columns:minmax(150px,25%) minmax(260px,1fr) minmax(150px,25%);gap:10px;align-items:center;max-width:100%;overflow:hidden}body.landscape-mode .joy-wrap{display:block;min-width:0}body.landscape-mode .joy-wrap:first-child{justify-self:start}body.landscape-mode .joy-wrap:last-child{justify-self:end}body.landscape-mode .joy{width:clamp(150px,22vw,220px)}body.landscape-mode .mobile-actions{display:grid;gap:8px;align-content:center;overflow:visible;min-width:0}.mobile-command-bank{display:grid;gap:7px}.mobile-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.mobile-row .button{min-height:40px;font-size:.76rem;padding:6px}.mobile-empty{min-height:40px}.mobile-live-toggles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(53,92,58,.28);box-shadow:0 -8px 18px rgba(53,92,58,.06)}.mobile-axis-toggle{min-height:34px;background:#4d554b;font-size:.68rem;line-height:1.05;padding:5px;box-shadow:none}.mobile-axis-toggle.active,.mobile-axis-toggle[data-mobile-cycle]{background:#2f7a45}.mobile-actions h2{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+      @media(max-width:560px){.grid{grid-template-columns:1fr}header{align-items:center}.servo-grid{grid-template-columns:1fr}h1{font-size:1.45rem}.mode-switch{gap:6px;font-size:.7rem}.switch-track{width:38px;height:22px}.switch-thumb{width:16px;height:16px}.mode-switch.active .switch-thumb{transform:translateX(16px)}}
+    </style>
+  </head>
+  <body>
+    <main>
+      <header><div class="header-left"><a class="home" href="/">Home</a><h1>Grogu Control</h1></div><button class="mode-switch" type="button" data-landscape-toggle aria-pressed="false"><span class="switch-track"><span class="switch-thumb"></span></span><span>Landscape</span></button></header>
+      <div class="grid">
+        <section class="panel">
+          <h2>Expressions</h2>
+          <div class="stack">
+            <button class="button" data-status="Wave command queued.">Wave</button>
+            <button class="button alt" data-status="Surprise No command queued.">Surprise No</button>
+            <button class="button" data-status="Auto Mode toggled.">Auto Mode</button>
+          </div>
+          <p class="status"></p>
+        </section>
+        <section class="panel">
+          <h2>Combo Sequences</h2>
+          <div class="stack">
+            <button class="button alt" data-status="Combo 1 command queued.">Combo 1</button>
+            <button class="button alt" data-status="Combo 2 command queued.">Combo 2</button>
+          </div>
+          <p class="status"></p>
+        </section>
+        <section class="panel">
+          <h2>Sound</h2>
+          <div class="stack">
+            <button class="button" data-status="Random Cute track preview started: 0001-0025.">Cute</button>
+            <button class="button warn" data-status="Sound stopped.">Stop Sound</button>
+          </div>
+          <p class="status"></p>
+        </section>
+        <section class="panel live" data-live-panel>
+          <h2>Live RC</h2>
+          <p class="status" id="liveStatus">Toggle a servo, then move the shared slider. Toggle it again to release it.</p>
+          <div class="servo-grid">
+            <button class="button servo-toggle" type="button" data-servo-toggle="head" data-servo-mode="percent" data-servo-channels="0,1" data-servo-config="0:3000:6000:8800:0,1:3000:6000:8800:0" data-servo-min="-1000" data-servo-max="1000" data-servo-value="0">Head Tilt</button>
+            <button class="button servo-toggle" type="button" data-servo-toggle="2" data-servo-mode="target" data-servo-channels="2" data-servo-min="3200" data-servo-max="8800" data-servo-value="6000">Neck Rotate</button>
+            <button class="button servo-toggle" type="button" data-servo-toggle="3" data-servo-mode="target" data-servo-channels="3" data-servo-min="3200" data-servo-max="12000" data-servo-value="6000">Left Arm</button>
+            <button class="button servo-toggle" type="button" data-servo-toggle="4" data-servo-mode="target" data-servo-channels="4" data-servo-min="3200" data-servo-max="12000" data-servo-value="6000">Right Arm</button>
+            <button class="button servo-toggle" type="button" data-servo-toggle="5" data-servo-mode="target" data-servo-channels="5" data-servo-min="3200" data-servo-max="12000" data-servo-value="6000">Left Elbow</button>
+            <button class="button servo-toggle" type="button" data-servo-toggle="6" data-servo-mode="target" data-servo-channels="6" data-servo-min="3200" data-servo-max="12000" data-servo-value="6000">Right Elbow</button>
+          </div>
+          <span hidden data-servo-toggle="arms" data-servo-mode="percent" data-servo-channels="3,4" data-servo-config="3:3200:6000:12000:0,4:3200:6000:12000:1"></span>
+          <span hidden data-servo-toggle="arm-left" data-servo-mode="percent" data-servo-channels="3" data-servo-config="3:3200:6000:12000:0"></span>
+          <span hidden data-servo-toggle="arm-right" data-servo-mode="percent" data-servo-channels="4" data-servo-config="4:3200:6000:12000:1"></span>
+          <span hidden data-servo-toggle="elbows" data-servo-mode="percent" data-servo-channels="5,6" data-servo-config="5:3200:6000:12000:0,6:3200:6000:12000:1"></span>
+          <span hidden data-servo-toggle="elbow-left" data-servo-mode="percent" data-servo-channels="5" data-servo-config="5:3200:6000:12000:0"></span>
+          <span hidden data-servo-toggle="elbow-right" data-servo-mode="percent" data-servo-channels="6" data-servo-config="6:3200:6000:12000:1"></span>
+          <div class="mobile-controller">
+            <div class="joy-wrap">
+              <h2>Head</h2>
+              <div class="joy" data-joy="left"><div class="joy-knob"></div></div>
+              <p class="status" data-joy-status="left"></p>
+            </div>
+            <div class="mobile-actions">
+              <div class="mobile-command-bank">
+                <div class="mobile-row" aria-label="Movements">
+                  <button class="button" data-status="Wave command queued.">Wave</button>
+                  <button class="button alt" data-status="Surprise No command queued.">Surprise No</button>
+                  <button class="button" data-status="Auto Mode toggled.">Auto Mode</button>
+                </div>
+                <div class="mobile-row" aria-label="Combo Sequences">
+                  <button class="button alt" data-status="Combo 1 command queued.">Combo 1</button>
+                  <button class="button alt" data-status="Combo 2 command queued.">Combo 2</button>
+                  <span class="mobile-empty"></span>
+                </div>
+                <div class="mobile-row" aria-label="Sounds">
+                  <button class="button" data-status="Random Cute track preview started: 0001-0025.">Cute</button>
+                  <button class="button warn" data-status="Sound stopped.">Stop Sound</button>
+                  <span class="mobile-empty"></span>
+                </div>
+              </div>
+              <div class="mobile-live-toggles">
+                <button class="button mobile-axis-toggle active" type="button" data-mobile-axis="head">Head Tilt</button>
+                <button class="button mobile-axis-toggle active" type="button" data-mobile-axis="neck">Neck Rotate</button>
+                <button class="button mobile-axis-toggle" type="button" data-mobile-cycle="arms" data-cycle-index="2" data-cycle-values="arm-left|arm-right|arms" data-cycle-labels="Left Arm|Right Arm|Both Arms">Both Arms</button>
+                <button class="button mobile-axis-toggle" type="button" data-mobile-cycle="elbows" data-cycle-index="2" data-cycle-values="elbow-left|elbow-right|elbows" data-cycle-labels="Left Elbow|Right Elbow|Both Elbows">Both Elbows</button>
+              </div>
+            </div>
+            <div class="joy-wrap">
+              <h2>Arms</h2>
+              <div class="joy" data-joy="right"><div class="joy-knob"></div></div>
+              <p class="status" data-joy-status="right"></p>
+            </div>
+          </div>
+          <div class="live-slider">
+            <label><span id="liveServoLabel">Selected Servo</span><span id="liveValue">Pick a servo</span></label>
+            <input id="liveSlider" type="range" min="0" max="1" value="0" disabled>
+          </div>
+        </section>
+      </div>
+    </main>
+    <script>
+      document.querySelectorAll("[data-status]").forEach((button) => {
+        button.addEventListener("click", () => {
+          button.closest(".panel").querySelector(".status").textContent = button.dataset.status;
+        });
+      });
+      let liveKey = null;
+      let lastJoystickMove = 0;
+      function refreshViewportSize() {
+        document.documentElement.style.setProperty("--vw", window.innerWidth + "px");
+        document.documentElement.style.setProperty("--vh", window.innerHeight + "px");
+      }
+      async function setLandscapeMode(on) {
+        refreshViewportSize();
+        document.body.classList.toggle("landscape-mode", on);
+        document.querySelectorAll("[data-landscape-toggle]").forEach((button) => {
+          button.classList.toggle("active", on);
+          button.setAttribute("aria-pressed", on ? "true" : "false");
+        });
+        try {
+          if (on) {
+            if (document.documentElement.requestFullscreen && !document.fullscreenElement) await document.documentElement.requestFullscreen();
+            if (screen.orientation && screen.orientation.lock) await screen.orientation.lock("landscape");
+          } else {
+            if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
+            if (document.fullscreenElement && document.exitFullscreen) await document.exitFullscreen();
+          }
+        } catch (error) {}
+        setTimeout(refreshViewportSize, 120);
+        setTimeout(refreshViewportSize, 360);
+      }
+      document.querySelectorAll("[data-landscape-toggle]").forEach((button) => {
+        button.addEventListener("click", () => setLandscapeMode(!document.body.classList.contains("landscape-mode")));
+      });
+      document.addEventListener("fullscreenchange", () => {
+        if (!document.fullscreenElement && document.body.classList.contains("landscape-mode")) setLandscapeMode(false);
+        else refreshViewportSize();
+      });
+      window.addEventListener("resize", refreshViewportSize);
+      window.addEventListener("orientationchange", () => setTimeout(refreshViewportSize, 180));
+      function mapRange(value, inMin, inMax, outMin, outMax) {
+        return Math.round(outMin + (outMax - outMin) * ((value - inMin) / (inMax - inMin)));
+      }
+      function targetsFor(button, value) {
+        if (button.dataset.servoMode !== "percent") {
+          return button.dataset.servoChannels.split(",").map((channel) => [channel, value]);
+        }
+        const percent = Number(value);
+        return button.dataset.servoConfig.split(",").map((item) => {
+          const parts = item.split(":");
+          const channel = parts[0];
+          const min = Number(parts[1]);
+          const center = Number(parts[2]);
+          const max = Number(parts[3]);
+          const reversed = parts[4] === "1";
+          const low = reversed ? max : min;
+          const high = reversed ? min : max;
+          const target = percent < 0 ? mapRange(percent, -1000, 0, low, center) : mapRange(percent, 0, 1000, center, high);
+          return [channel, target];
+        });
+      }
+      function buttonByKey(key) {
+        return document.querySelector('[data-servo-toggle="' + key + '"]');
+      }
+      function axisEnabled(axis) {
+        const button = document.querySelector('[data-mobile-axis="' + axis + '"]');
+        return !button || button.classList.contains("active");
+      }
+      document.querySelectorAll("[data-mobile-axis]").forEach((button) => {
+        button.addEventListener("click", () => button.classList.toggle("active"));
+      });
+      function selectedCycle(group) {
+        const button = document.querySelector('[data-mobile-cycle="' + group + '"]');
+        if (!button) return group;
+        const values = button.dataset.cycleValues.split("|");
+        return values[Number(button.dataset.cycleIndex) || 0];
+      }
+      document.querySelectorAll("[data-mobile-cycle]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const labels = button.dataset.cycleLabels.split("|");
+          const values = button.dataset.cycleValues.split("|");
+          const next = ((Number(button.dataset.cycleIndex) || 0) + 1) % values.length;
+          button.dataset.cycleIndex = next;
+          button.textContent = labels[next];
+        });
+      });
+      function setLive(button, on) {
+        const slider = document.querySelector("#liveSlider");
+        document.querySelectorAll("[data-servo-toggle]").forEach((item) => item.classList.remove("active"));
+        if (!on) {
+          liveKey = null;
+          slider.disabled = true;
+          document.querySelector("#liveServoLabel").textContent = "Selected Servo";
+          document.querySelector("#liveValue").textContent = "Pick a servo";
+          document.querySelector("#liveStatus").textContent = "Servo released.";
+          return;
+        }
+        liveKey = button.dataset.servoToggle;
+        button.classList.add("active");
+        slider.min = button.dataset.servoMin;
+        slider.max = button.dataset.servoMax;
+        slider.value = button.dataset.servoValue;
+        slider.disabled = false;
+        document.querySelector("#liveServoLabel").textContent = button.textContent;
+        document.querySelector("#liveValue").textContent = button.dataset.servoMode === "percent" ? (slider.value / 10) + "%" : slider.value;
+        document.querySelector("#liveStatus").textContent = button.textContent + " active.";
+      }
+      document.querySelectorAll("[data-servo-toggle]").forEach((button) => {
+        button.addEventListener("click", () => setLive(button, liveKey !== button.dataset.servoToggle));
+      });
+      document.querySelector("#liveSlider").addEventListener("input", (event) => {
+        if (liveKey === null) return;
+        const button = document.querySelector('[data-servo-toggle="' + liveKey + '"]');
+        button.dataset.servoValue = event.target.value;
+        const targets = targetsFor(button, event.target.value).map((target) => "CH" + target[0] + " " + target[1]).join(", ");
+        document.querySelector("#liveValue").textContent = button.dataset.servoMode === "percent" ? (event.target.value / 10) + "%" : event.target.value;
+        document.querySelector("#liveStatus").textContent = "Preview " + button.textContent + " target " + targets + ".";
+      });
+      function joystickTargets(kind, xPercent, yPercent) {
+        let targets = [];
+        if (kind === "left") {
+          const head = buttonByKey("head");
+          const neck = buttonByKey("2");
+          if (head && axisEnabled("head")) targets = targets.concat(targetsFor(head, yPercent));
+          if (neck && axisEnabled("neck")) targets = targets.concat(targetsFor(neck, mapRange(xPercent, -1000, 1000, Number(neck.dataset.servoMin), Number(neck.dataset.servoMax))));
+        } else {
+          const arms = buttonByKey(selectedCycle("arms"));
+          const elbows = buttonByKey(selectedCycle("elbows"));
+          if (arms) targets = targets.concat(targetsFor(arms, yPercent));
+          if (elbows) targets = targets.concat(targetsFor(elbows, xPercent));
+        }
+        return targets;
+      }
+      function bindJoystick(joystick) {
+        const joystickKnob = joystick.querySelector(".joy-knob");
+        const kind = joystick.dataset.joy;
+        function moveJoystick(event) {
+          const rect = joystick.getBoundingClientRect();
+          const radius = rect.width / 2;
+          let x = event.clientX - rect.left - radius;
+          let y = event.clientY - rect.top - radius;
+          const distance = Math.hypot(x, y);
+          if (distance > radius) {
+            x = x / distance * radius;
+            y = y / distance * radius;
+          }
+          joystickKnob.style.transform = "translate(calc(-50% + " + x + "px),calc(-50% + " + y + "px))";
+          const now = Date.now();
+          if (now - lastJoystickMove < 70) return;
+          lastJoystickMove = now;
+          const xPercent = Math.round(x / radius * 1000);
+          const yPercent = Math.round(-y / radius * 1000);
+          const targets = joystickTargets(kind, xPercent, yPercent);
+          const label = targets.map((target) => "CH" + target[0] + " " + target[1]).join(", ");
+          document.querySelector('[data-joy-status="' + kind + '"]').textContent = "Preview " + label + ".";
+        }
+        joystick.addEventListener("pointerdown", (event) => {
+          joystick.setPointerCapture(event.pointerId);
+          moveJoystick(event);
+        });
+        joystick.addEventListener("pointermove", (event) => {
+          if (event.buttons) moveJoystick(event);
+        });
+        joystick.addEventListener("pointerup", () => {});
+        joystick.addEventListener("pointercancel", () => {});
+      }
+      document.querySelectorAll("[data-joy]").forEach(bindJoystick);
+    </script>
+  </body>
+</html>
