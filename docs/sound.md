@@ -5,7 +5,7 @@ DFPlayer microSD card.
 
 ## File Naming
 
-Place MP3 files on the microSD card using four-digit numbered names:
+Place MP3 files in the microSD card `/MP3` folder using four-digit numbered names:
 
 ```text
 0001.mp3
@@ -14,7 +14,8 @@ Place MP3 files on the microSD card using four-digit numbered names:
 ```
 
 The `Sound Test` tab on the `Grogu Setup` page sends the track number to the
-DFPlayer. Track `1` plays `0001.mp3`, track `2` plays `0002.mp3`, and so on.
+DFPlayer. Track `1` plays `/MP3/0001.mp3`, track `2` plays `/MP3/0002.mp3`,
+and so on.
 The firmware uses a command-only UART connection and does not read DFPlayer
 status responses.
 
@@ -43,4 +44,4 @@ constexpr int8_t DFPLAYER_TX_PIN = 1;  // XIAO D0 / GPIO1 sends to DFPlayer RX
 
 If a track does not play, check DFPlayer power, common ground, the one-way
 ESP32 `D0` to DFPlayer `RX` wiring, the series resistor into DFPlayer `RX`, and
-that the microSD card is inserted with numbered MP3 files.
+that the microSD card is inserted with numbered MP3 files in the `/MP3` folder.

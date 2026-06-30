@@ -96,7 +96,7 @@
               </div>
               <div class="mobile-live-toggles">
                 <button class="button mobile-axis-toggle active" type="button" data-mobile-axis="head">Head Tilt</button>
-                <button class="button mobile-axis-toggle active" type="button" data-mobile-axis="neck">Neck Rotate</button>
+                <button class="button mobile-axis-toggle" type="button" data-mobile-axis="neck">Neck Rotate</button>
                 <button class="button mobile-axis-toggle" type="button" data-mobile-cycle="arms" data-cycle-index="2" data-cycle-values="arm-left|arm-right|arms" data-cycle-labels="Left Arm|Right Arm|Both Arms">Both Arms</button>
                 <button class="button mobile-axis-toggle" type="button" data-mobile-cycle="elbows" data-cycle-index="2" data-cycle-values="elbow-left|elbow-right|elbows" data-cycle-labels="Left Elbow|Right Elbow|Both Elbows">Both Elbows</button>
               </div>
@@ -122,6 +122,8 @@
       });
       let liveKey = null;
       let lastJoystickMove = 0;
+      const JOYSTICK_INTERVAL_MS = 140;
+      const JOYSTICK_DEADBAND = 35;
       function refreshViewportSize() {
         document.documentElement.style.setProperty("--vw", window.innerWidth + "px");
         document.documentElement.style.setProperty("--vh", window.innerHeight + "px");
@@ -157,23 +159,24 @@
       function mapRange(value, inMin, inMax, outMin, outMax) {
         return Math.round(outMin + (outMax - outMin) * ((value - inMin) / (inMax - inMin)));
       }
+      function percentTargetFor(item, percent) {
+        const parts = item.split(":");
+        const channel = parts[0];
+        const min = Number(parts[1]);
+        const center = Number(parts[2]);
+        const max = Number(parts[3]);
+        const reversed = parts[4] === "1";
+        const low = reversed ? max : min;
+        const high = reversed ? min : max;
+        const target = percent < 0 ? mapRange(percent, -1000, 0, low, center) : mapRange(percent, 0, 1000, center, high);
+        return [channel, target];
+      }
       function targetsFor(button, value) {
         if (button.dataset.servoMode !== "percent") {
           return button.dataset.servoChannels.split(",").map((channel) => [channel, value]);
         }
         const percent = Number(value);
-        return button.dataset.servoConfig.split(",").map((item) => {
-          const parts = item.split(":");
-          const channel = parts[0];
-          const min = Number(parts[1]);
-          const center = Number(parts[2]);
-          const max = Number(parts[3]);
-          const reversed = parts[4] === "1";
-          const low = reversed ? max : min;
-          const high = reversed ? min : max;
-          const target = percent < 0 ? mapRange(percent, -1000, 0, low, center) : mapRange(percent, 0, 1000, center, high);
-          return [channel, target];
-        });
+        return button.dataset.servoConfig.split(",").map((item) => percentTargetFor(item, percent));
       }
       function buttonByKey(key) {
         return document.querySelector('[data-servo-toggle="' + key + '"]');
@@ -183,7 +186,9 @@
         return !button || button.classList.contains("active");
       }
       document.querySelectorAll("[data-mobile-axis]").forEach((button) => {
-        button.addEventListener("click", () => button.classList.toggle("active"));
+        button.addEventListener("click", () => {
+          document.querySelectorAll("[data-mobile-axis]").forEach((item) => item.classList.toggle("active", item === button));
+        });
       });
       function selectedCycle(group) {
         const button = document.querySelector('[data-mobile-cycle="' + group + '"]');
@@ -241,9 +246,19 @@
           if (neck && axisEnabled("neck")) targets = targets.concat(targetsFor(neck, mapRange(xPercent, -1000, 1000, Number(neck.dataset.servoMin), Number(neck.dataset.servoMax))));
         } else {
           const arms = buttonByKey(selectedCycle("arms"));
-          const elbows = buttonByKey(selectedCycle("elbows"));
-          if (arms) targets = targets.concat(targetsFor(arms, yPercent));
-          if (elbows) targets = targets.concat(targetsFor(elbows, xPercent));
+          const elbowKey = selectedCycle("elbows");
+          const elbows = buttonByKey(elbowKey);
+          if (arms) targets = targets.concat(targetsFor(arms, -yPercent));
+          if (elbows) {
+            if (elbowKey === "elbows") {
+              const leftElbow = buttonByKey("elbow-left");
+              const rightElbow = buttonByKey("elbow-right");
+              if (leftElbow) targets = targets.concat(targetsFor(leftElbow, xPercent));
+              if (rightElbow) targets = targets.concat(targetsFor(rightElbow, -xPercent));
+            } else {
+              targets = targets.concat(targetsFor(elbows, xPercent));
+            }
+          }
         }
         return targets;
       }
@@ -262,10 +277,15 @@
           }
           joystickKnob.style.transform = "translate(calc(-50% + " + x + "px),calc(-50% + " + y + "px))";
           const now = Date.now();
-          if (now - lastJoystickMove < 70) return;
+          if (now - lastJoystickMove < JOYSTICK_INTERVAL_MS) return;
           lastJoystickMove = now;
           const xPercent = Math.round(x / radius * 1000);
           const yPercent = Math.round(-y / radius * 1000);
+          const lastX = Number(joystick.dataset.lastX || 9999);
+          const lastY = Number(joystick.dataset.lastY || 9999);
+          if (Math.abs(xPercent - lastX) < JOYSTICK_DEADBAND && Math.abs(yPercent - lastY) < JOYSTICK_DEADBAND) return;
+          joystick.dataset.lastX = xPercent;
+          joystick.dataset.lastY = yPercent;
           const targets = joystickTargets(kind, xPercent, yPercent);
           const label = targets.map((target) => "CH" + target[0] + " " + target[1]).join(", ");
           document.querySelector('[data-joy-status="' + kind + '"]').textContent = "Preview " + label + ".";

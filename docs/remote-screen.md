@@ -1,7 +1,7 @@
 # ESP-NOW Display Remote
 
 The main firmware includes an ESP-NOW command receiver in the puppet controller
-and a separate display firmware project for the round remote screen.
+and a separate display firmware project in [`../remote_screen`](../remote_screen).
 The web flasher publishes this display image as `Display 0.2.9`.
 
 ## Hardware Target
@@ -26,7 +26,7 @@ touch pins:
 ## Flashing
 
 Use the web flasher and select `Display 0.2.9` for the round display board.
-Use the current recommended Master firmware for the puppet controller board.
+Use `0.2.8 Master` for the puppet controller board.
 
 After flashing the display, connect to Wi-Fi AP `GroguOS Display` and open
 `http://192.168.5.1`.
@@ -52,13 +52,14 @@ shared channel; the puppet IP is used for HTTP fallback/config references.
 
 ## Commands
 
+The shared packet format is in [`../include/RemoteProtocol.h`](../include/RemoteProtocol.h).
 The first supported command families are:
 
 | Family | Behavior |
 | --- | --- |
 | Built-in | Auto Mode, Arm Mode, Right Arm Wave, Surprise No |
 | Maestro | Restart Maestro script subroutine with a holdoff |
-| Sound | Play numbered MP3 tracks, random categories, stop sound, set volume |
+| Sound | Play numbered MP3 tracks, stop sound, set volume |
 
 ## Display UI
 

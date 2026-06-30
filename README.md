@@ -5,11 +5,11 @@ GroguOS drives the puppet servos through a Pololu Maestro, reads an SBUS RC
 receiver, plays DFPlayer Mini sounds, and hosts a browser-based setup and
 control interface from the ESP32 setup access point.
 
-Current master firmware version: `0.3.1`
+Current master firmware version: `0.4.4`
 
 Current display firmware version: `Display 0.2.9`
 
-Current stable rollback version: `0.3.0`
+Current stable rollback version: `0.4.0`
 
 Flash the latest firmware via web browser here:
 [Web Flash Tool](https://animated-grogu.pages.dev/)
@@ -30,6 +30,7 @@ Flash the latest firmware via web browser here:
 - [Servo setup live preview](docs/servo-setup-preview.md)
 - [First upload and test procedure](docs/first-upload-test.md)
 - [ESP-NOW display remote](docs/remote-screen.md)
+- [Cloudflare web flash setup](docs/cloudflare-webflash.md)
 - [Changelog](CHANGELOG.md)
 
 ## Hardware
@@ -77,10 +78,13 @@ positions hold where released instead of snapping back to center.
 
 The Settings page includes:
 
-- `System` for network, setup access, settings backup, and system tools.
+- `System` for network, setup access, settings backup, and system tools,
+  including OTA update checks, rollback, and reinstall current version.
 - `Servos` for per-servo min, center, max, reverse, speed, acceleration, and smoothing.
-- `Button Assignments` for RC button actions, command tests, and sound tests.
-- `Control Preview` for configuring the public Control screen.
+- `Button Assignments` for RC button actions, command tests, sound tests, and
+  Auto Mode random sound setup.
+- `Control Setup` for configuring the public Control screen; Movements, Sounds,
+  and Combo Sequences fold open only when you are editing them.
 - `Combos` for multi-step sound, movement, display, and timing sequences.
 - `RC Input` for transmitter calibration.
 
@@ -89,11 +93,11 @@ The Settings page includes:
 DFPlayer Mini tracks can be played by exact track number or by fixed random
 category. Random categories are mapped by track number range:
 
-- `Cute`: tracks `1` through `25`
-- `Phrases`: tracks `26` through `50`
-- `Sentences`: tracks `51` through `75`
-- `Burps and Slurps`: tracks `76` through `100`
-- `Sound Combos`: tracks `101` through `125`
+- `Cute`: tracks `1` through `23`
+- `Phrases`: tracks `26` through `29`
+- `Sentences`: tracks `51` through `63`
+- `Burps and Slurps`: tracks `76` through `83`
+- `Sound Combos`: tracks `101` through `112`
 
 Random category sound actions are available from RC Button Assignments and the
 public Control screen.
@@ -108,7 +112,4 @@ public Control screen.
 - Use the `RC Input` setup tab to calibrate remote centers if the head drifts when the transmitter turns on.
 - Head tilt uses paired mixing, so CH0 and CH1 can have different centers but move together from the same stick command.
 
-## Firmware
-
-The firmware source repository is private. Public firmware releases are shared
-through the web flasher when available.
+Firmware build and Cloudflare deploy commands live in the private firmware repo.

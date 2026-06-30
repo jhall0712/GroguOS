@@ -1,7 +1,7 @@
 # RC Button Assignments
 
-Firmware `0.1.6` supports the DS-650's four assignable buttons on SBUS `CH3`
-through `CH6`.
+GroguOS supports the DS-650's four assignable buttons on SBUS `CH3` through
+`CH6`.
 
 ## Default Channel Mapping
 
@@ -21,13 +21,20 @@ Each of the four button boxes has:
 
 | Setting | Purpose |
 | --- | --- |
-| Action | Disabled, built-in sequence, Maestro sequence, or direct servo control. |
+| Action | Disabled, built-in sequence, Maestro sequence, direct servo control, sound, or combo. |
 | Built-in sequence | `Auto Mode toggle`, `Arm Mode toggle`, `Right Arm Wave`, or `Surprise No`. |
 | Maestro sequence | Maestro script subroutine number, such as `00`, `01`, `02`. |
 | Holdoff ms | How long the ESP32 pauses normal servo target updates after starting a Maestro sequence. |
 | Direct servo channel | Maestro channel controlled directly by this RC channel. |
+| Sound mode | Play one specific DFPlayer track or choose a random track from a fixed category. |
+| Combo slot | Run one of the saved combo sequences. |
 
 Settings are saved in ESP32 Preferences/NVS.
+
+The page also includes test cards for built-in commands, Maestro sequences, and
+DFPlayer sounds. The Auto Sounds card lives here too; it controls whether Auto
+Mode occasionally plays random sounds, which categories are allowed, the delay
+range, and playback volume.
 
 RC button actions are edge-triggered. A button channel must rise above the press
 threshold and then fall back below the release threshold before it can trigger
@@ -58,6 +65,30 @@ is healthy. If the assigned RC control is only a two-position button, the servo
 will move between the low and high ends of its saved range. If the transmitter
 can make that channel proportional or multi-position, the servo follows that
 range more smoothly.
+
+## Sound And Combo Actions
+
+Sound actions fire once when the button is pressed. A sound action can play a
+specific four-digit DFPlayer track number or choose randomly from one of the
+configured sound ranges:
+
+| Category | Tracks |
+| --- | --- |
+| Cute | `1-23` |
+| Phrases | `26-29` |
+| Sentences | `51-63` |
+| Burps and Slurps | `76-83` |
+| Sound Combos | `101-112` |
+
+Combo actions fire one saved combo sequence by slot number. Edit combo steps
+from the `Combo Sequences` tab, then assign the slot from `Button Assignments`.
+
+## Auto Sounds
+
+The Auto Sounds card controls the random sounds that can play while Auto Mode is
+active. Enable Auto Mode Sounds, choose one or more categories, set the minimum
+and maximum delay, then choose a DFPlayer volume. Defaults are intentionally
+conservative with Cute and Burps enabled.
 
 ## Built-In Sequences
 

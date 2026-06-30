@@ -1,5 +1,88 @@
 # Changelog
 
+## 0.4.4
+
+- Fixed the right virtual joystick arm direction so pushing up raises the arms
+  and pushing down lowers them.
+- Changed paired elbow joystick control so left/right commands mirror the left
+  and right elbows instead of driving both with the same percent direction.
+- Reworked the System page OTA card so it hides the firmware URL, checks
+  Cloudflare for updates, reports availability, and offers rollback, reinstall
+  current version, and install update actions.
+- Added automatic settings page refresh after a successful OTA install response
+  so the browser reconnects after the ESP32 reboots.
+- Moved Auto Mode random sound setup to the Button Assignments page as its own
+  card and saved those settings with button assignments.
+- Collapsed inactive Control Setup categories so Movements opens by default
+  while Sounds and Combo Sequences stay folded until edited.
+
+## 0.4.3
+
+- Added an authenticated System page OTA firmware update action that downloads
+  the latest app image over Home Wi-Fi and reboots after a successful install.
+- Added versioned and latest `.ota.bin` firmware artifacts alongside the
+  existing factory webflash images.
+- Refreshed the master webflash firmware and metadata for this checkpoint.
+
+## 0.4.2
+
+- Added conservative Auto Mode random sounds with persisted category, delay,
+  and volume settings. Defaults enable Cute and Burps only.
+- Reduced desktop virtual joystick command flooding by throttling joystick
+  sends, ignoring tiny pointer changes, and dropping stale queued positions.
+- Refreshed the master webflash firmware and metadata for this checkpoint.
+
+## 0.4.1
+
+- Tuned the built-in Right Arm Wave sequence so the arm stays raised while the
+  right elbow performs the visible wave motion.
+- Tuned Surprise No with higher arms, wider repeated elbow movement, and a
+  faster, larger head shake.
+- Added future-feature notes for a secure ESP-NOW Republic Link command layer.
+- Refreshed the master webflash firmware and metadata for this checkpoint.
+
+## 0.4.0
+
+- Reorganized the System page into separate cards for setup AP network,
+  home Wi-Fi station setup, settings access, and combined backup/restore.
+- Kept home Wi-Fi scan and connect controls with the home Wi-Fi settings.
+- Simplified home Wi-Fi scan results to unique network names without signal
+  readings.
+- Bumped master firmware and webflash metadata for the 0.4.0 UI update.
+
+## 0.3.4
+
+- Fixed RC button assignment saves by keeping inactive fields out of the
+  submitted setup form payload.
+- Improved home Wi-Fi reconnect behavior after reboot and added an explicit
+  `Connect To Home Wi-Fi` action with LAN IP feedback.
+- Switched DFPlayer playback to `/MP3/0001.mp3` filename-addressed playback so
+  track numbers match the four-digit file names instead of SD card file order.
+- Updated DFPlayer setup docs and previews for the `/MP3` folder layout.
+- Refreshed the master webflash firmware and metadata for this checkpoint.
+
+## 0.3.3
+
+- Added station Wi-Fi setup with network scanning, saved home Wi-Fi
+  credentials, immediate connect after save/import, and station IP display.
+- Kept the setup access point available at `192.168.4.1` as a fallback while
+  station Wi-Fi is configured or unavailable.
+- Fixed RC button assignment persistence for combo and Maestro sequence
+  options after reboot.
+- Added visual click feedback to setup and control page buttons.
+- Updated random audio category ranges to Cute `1-23`, Phrases `26-29`,
+  Sentences `51-63`, Burps `76-83`, and Combos `101-112`.
+- Refreshed the master webflash firmware and metadata for this checkpoint.
+
+## 0.3.2
+
+- Updated the landscape live RC control preview to mirror the normal RC stick
+  mapping: left stick up/down drives paired head tilt, and left/right drives
+  neck rotate.
+- Improved settings backup/export coverage for network access, settings
+  credentials, control screen buttons, combo sequences, and saved passwords.
+- Refreshed the master webflash firmware and previews for this checkpoint.
+
 ## Display 0.2.9
 
 - Added random sound category buttons for `Cute`, `Phrases`, `Sentences`,

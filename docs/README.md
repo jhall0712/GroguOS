@@ -3,11 +3,11 @@
 This section collects the bench notes for wiring, configuration, upload, and
 first tests for the XIAO ESP32-S3 puppet controller.
 
-Current master firmware version: `0.3.1`
+Current master firmware version: `0.4.4`
 
 Current display firmware version: `Display 0.2.9`
 
-Current stable rollback version: `0.3.0`
+Current stable rollback version: `0.4.0`
 
 ## Pages
 
@@ -24,6 +24,8 @@ Current stable rollback version: `0.3.0`
 - [DFPlayer Mini Sound](sound.md)
 - [ESP-NOW Display Remote](remote-screen.md)
 - [First Upload and Test Procedure](first-upload-test.md)
+- [Cloudflare Web Flash Setup](cloudflare-webflash.md)
+- [Future Features](future-features.md)
 - [Changelog](../CHANGELOG.md)
 
 ## Firmware Defaults
@@ -49,5 +51,10 @@ Current stable rollback version: `0.3.0`
   `Burps and Slurps`, and `Sound Combos`.
 - Settings export/import for backing up servo, button, control, combo, sound,
   network, and access configuration.
+- OTA update checks, current-version reinstall, and rollback from the protected
+  System page when Grogu is connected to Home Wi-Fi.
+- Auto Mode random sound settings on the Button Assignments page.
+- Collapsible Control Setup categories for public movement, sound, and combo
+  buttons.
 
 Pin defaults are summarized here and live in the private firmware source.

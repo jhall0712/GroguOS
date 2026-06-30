@@ -12,13 +12,21 @@ configuration changes.
 
 The export includes:
 
+- Setup AP name and optional password
+- Settings username and optional password
 - Servo `min`, `center`, `max`
 - Servo `reversed`
 - Servo `speed`, `acceleration`, and `smoothing`
 - RC button action assignments
+- Control screen movement, sound, and combo buttons
+- Random sound category settings
+- Combo sequence names, steps, timing, and enabled state
 - Built-in sequence choices
 - Maestro sequence numbers and holdoff times
 - Direct servo control channel choices
+
+Treat the exported JSON like a password file if you use an AP password or
+settings password.
 
 ## Import
 

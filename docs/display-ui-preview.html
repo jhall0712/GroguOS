@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>GroguOS Display UI Preview</title>
+    <style>
+      :root{--leaf:#4e9e4d;--tan:#d4c78a;--sky:#45b6d9;--dark:#050705;--ring:#202820;--select:#0d4f28}
+      *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#efe6d5;color:#253026;font-family:system-ui,-apple-system,Segoe UI,sans-serif;padding:24px}
+      main{display:grid;gap:18px;justify-items:center}.watch{width:320px;height:320px;border-radius:50%;background:#111812;padding:32px;box-shadow:0 20px 50px rgba(30,24,15,.26),inset 0 0 0 10px #202820}.screen{position:relative;width:240px;height:240px;border-radius:50%;background:#000;overflow:hidden;box-shadow:inset 0 0 28px rgba(255,255,255,.08)}
+      .view{position:absolute;inset:0;padding:18px 20px;text-align:center}.hidden{display:none}.home-title{color:var(--leaf);font-weight:900;font-size:27px;line-height:.95;margin:4px 0 8px}.art{width:116px;height:76px;margin:8px auto 2px;position:relative}.head{position:absolute;left:9px;right:9px;bottom:10px;height:48px;background:#6fa85b;border:3px solid #3d7140;border-radius:55% 55% 42% 42%}.ear{position:absolute;top:18px;width:74px;height:32px;background:#6fa85b;border:3px solid #3d7140}.ear.left{left:-18px;border-radius:90% 20% 60% 30%;transform:rotate(13deg)}.ear.right{right:-18px;border-radius:20% 90% 30% 60%;transform:rotate(-13deg)}.eye{position:absolute;top:25px;width:28px;height:21px;background:#050505;border-radius:50%;z-index:2}.eye.left{left:35px}.eye.right{right:35px}.battery{position:absolute;left:58px;top:164px;width:36px;height:20px;border:2px solid #d6d6d6;border-radius:4px}.battery:after{content:"";position:absolute;right:-5px;top:5px;width:3px;height:8px;background:#d6d6d6}.battery span{display:block;margin:3px;width:22px;height:10px;background:#36b45e}.home .percent{position:absolute;left:44px;top:190px;color:var(--tan);font-weight:900;font-size:24px}.home .status-label{position:absolute;right:38px;top:164px;color:var(--leaf);font-weight:900;font-size:13px}.home .status{position:absolute;right:22px;top:196px;width:84px;color:var(--tan);font-weight:800;font-size:15px}
+      .menu h1{margin:0 0 18px;color:#45d96b;font-size:26px}.items{display:grid;gap:4px;text-align:left}.item{height:24px;display:flex;align-items:center;padding-left:14px;border-radius:8px;color:#d8d8d8;font-weight:800;font-size:14px}.item.active{background:var(--select);color:#fff}.menu .status{position:absolute;left:0;right:0;bottom:18px;color:var(--sky);font-weight:800;font-size:14px}
+      .controls{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}.controls button{border:0;border-radius:8px;background:#355c3a;color:#fff;font-weight:900;min-height:38px;padding:0 12px}.controls button.secondary{background:#7a5f41}p{max-width:50ch;text-align:center;color:#657160;margin:0}
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="watch">
+        <div class="screen">
+          <section class="view home" data-view="home">
+            <div class="home-title">ANIMATED<br>GROGU</div>
+            <div class="art"><div class="ear left"></div><div class="ear right"></div><div class="head"></div><div class="eye left"></div><div class="eye right"></div></div>
+            <div class="battery"><span></span></div><div class="percent">82%</div>
+            <div class="status-label">STATUS</div><div class="status">Puppet ACK</div>
+          </section>
+          <section class="view menu hidden" data-view="menu">
+            <h1 data-menu-title>Sounds</h1>
+            <div class="items" data-items></div>
+            <div class="status" data-status>Ready</div>
+          </section>
+        </div>
+      </div>
+      <div class="controls">
+        <button type="button" data-page="home">Home</button>
+        <button type="button" data-page="built">Built-ins</button>
+        <button type="button" data-page="maestro">Maestro</button>
+        <button type="button" data-page="sound">Sounds</button>
+        <button type="button" data-page="combo">Combos</button>
+        <button class="secondary" type="button" data-move="-1">Up</button>
+        <button class="secondary" type="button" data-move="1">Down</button>
+        <button class="secondary" type="button" data-send>Tap</button>
+      </div>
+      <p>Preview of the 240px round touch display UI. Swipe changes menus, swipe up/down changes selection, and tap sends the highlighted command.</p>
+    </main>
+    <script>
+      const menus={built:{title:"Built-ins",items:["Auto Mode","Arm Mode","Right Arm Wave","Surprise No"]},maestro:{title:"Maestro",items:["Sequence 00","Sequence 01","Sequence 02","Sequence 03","Sequence 04"]},sound:{title:"Sounds",items:["Cute","Phrases","Sentences","Burps Slurps","Sound Combos"]},combo:{title:"Combos",items:["Combo 1","Combo 2","Combo 3","Combo 4"]}};
+      let current="sound",selected=0;
+      const home=document.querySelector('[data-view="home"]'),menu=document.querySelector('[data-view="menu"]'),title=document.querySelector("[data-menu-title]"),items=document.querySelector("[data-items]"),status=document.querySelector("[data-status]");
+      function render(){home.classList.toggle("hidden",current!=="home");menu.classList.toggle("hidden",current==="home");if(current==="home")return;const data=menus[current];title.textContent=data.title;items.innerHTML="";data.items.slice(0,5).forEach((label,i)=>{const row=document.createElement("div");row.className="item"+(i===selected?" active":"");row.textContent=label;items.appendChild(row);});}
+      document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>{current=b.dataset.page;selected=0;status.textContent="Ready";render();}));
+      document.querySelectorAll("[data-move]").forEach(b=>b.addEventListener("click",()=>{if(current==="home")return;selected=Math.max(0,Math.min(menus[current].items.length-1,selected+Number(b.dataset.move)));render();}));
+      document.querySelector("[data-send]").addEventListener("click",()=>{if(current==="home"){current="built";selected=0;}else{status.textContent="Sending direct";setTimeout(()=>status.textContent="Puppet ACK",500);}render();});
+      render();
+    </script>
+  </body>
+</html>

@@ -78,7 +78,7 @@ Set the Maestro serial configuration to:
 
 ## DFPlayer Sound Test
 
-1. Put numbered MP3 files on the DFPlayer microSD card, starting with
+1. Put numbered MP3 files in the DFPlayer microSD card `/MP3` folder, starting with
    `0001.mp3`.
 2. Wire the DFPlayer Mini as shown in the wiring reference.
 3. Connect to `Grogu Setup` and open `http://192.168.4.1`.

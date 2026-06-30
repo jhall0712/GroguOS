@@ -57,5 +57,6 @@ as UART RX on `GPIO44`.
   level shifter or voltage divider before `GPIO44`.
 - Configure the Maestro serial settings for `9600` baud, UART serial, compact
   protocol-compatible operation, and CRC off.
-- To change UART pins, edit `SBUS_RX_PIN`, `MAESTRO_TX_PIN`, and
-  `DFPLAYER_TX_PIN` in the private firmware source.
+- To change UART pins, edit `SBUS_RX_PIN`, `MAESTRO_TX_PIN`,
+  and `DFPLAYER_TX_PIN` at the top of the private firmware repo's
+  `src/main.cpp`.

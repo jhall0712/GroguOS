@@ -54,7 +54,7 @@ See [RC Button Assignments](button-assignments.md) for the full setup details.
 
 ## Firmware Mapping Constants
 
-The firmware uses this zero-based SBUS mapping internally:
+The private firmware source keeps the mapping near the top of `src/main.cpp`:
 
 ```cpp
 constexpr uint8_t HEAD_TILT_SBUS_CHANNEL = 1;    // SBUS CH2: stick up/down drives both head tilt servos
@@ -67,7 +67,8 @@ constexpr uint8_t SEQUENCE_BUTTON_SBUS_CHANNELS[RC_SEQUENCE_BUTTON_COUNT] = {
 };
 ```
 
-In the firmware source, `0` means SBUS `CH1`, `1` means SBUS `CH2`, and so on.
+These values are zero-based in code: `0` means SBUS `CH1`, `1` means SBUS
+`CH2`, and so on.
 
 ## Setup Checklist
 
